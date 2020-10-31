@@ -25,3 +25,4 @@ class CheckIn extends HTMLElement{
     
     }
 }
+window.customElements.define('check-in',CheckIn)
