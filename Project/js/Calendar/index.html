@@ -58,7 +58,22 @@
   
     <script src="https://momentjs.com/downloads/moment-with-locales.min.js"></script>
     <script src="calendar.js"></script>
-</body>
+</body> 
+            <template id="popup-template">
+                    <div id="popup1" class="overlay">
+                        <div class="popup">
+                            <form id="add-event">
+                                <label>tên sự kiện</label>
+                                <input type="text" name="event" id="event-content" />
+                                <label id="time-in"> Giờ vào ca </label>
+                                <input type="time" id="check-in-time">
+                                <label id="time-out">Giờ kết ca</label>
+                                <input type="time" name="" id="check-out-time">
+                            </form>
+                            <button>Vào ca</button>
+                        </div>
+                    </div>
+            </template>
 <template id="check-in-template">
     <div>
         <label>
