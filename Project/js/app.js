@@ -9,3 +9,5 @@
     
 
 //   })()
+let modal = document.getElementById('popup1')
+    

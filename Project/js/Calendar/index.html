@@ -27,6 +27,7 @@
   firebase.initializeApp(firebaseConfig);
 </script>
 <body>
+    <overlay></overlay>
     <div class="calendar" col-sm-4 col-md-7  col-mg-4 mt-5>
         <h1>Calendar Work</h1>
         <div class="card">
@@ -63,14 +64,14 @@
                     <div id="popup1" class="overlay">
                         <div class="popup">
                             <form id="add-event">
-                                <label>tên sự kiện</label>
+                                <label>Tạo ca làm</label>
                                 <input type="text" name="event" id="event-content" />
                                 <label id="time-in"> Giờ vào ca </label>
                                 <input type="time" id="check-in-time">
                                 <label id="time-out">Giờ kết ca</label>
                                 <input type="time" name="" id="check-out-time">
                             </form>
-                            <button>Vào ca</button>
+                            <button id="btn-get-time">Tạo ca làm </button>
                         </div>
                     </div>
             </template>
