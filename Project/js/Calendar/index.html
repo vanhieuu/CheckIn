@@ -27,7 +27,7 @@
   firebase.initializeApp(firebaseConfig);
 </script>
 <body>
-    <overlay></overlay>
+    <show-pop-up id="popup" show="false"></show-pop-up >
     <div class="calendar" col-sm-4 col-md-7  col-mg-4 mt-5>
         <h1>Calendar Work</h1>
         <div class="card">
@@ -58,20 +58,21 @@
 
   
     <script src="https://momentjs.com/downloads/moment-with-locales.min.js"></script>
-    <script src="calendar.js"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css">
 </body> 
             <template id="popup-template">
                     <div id="popup1" class="overlay">
                         <div class="popup">
                             <form id="add-event">
                                 <label>Tạo ca làm</label>
-                                <input type="text" name="event" id="event-content" />
-                                <label id="time-in"> Giờ vào ca </label>
-                                <input type="time" id="check-in-time">
-                                <label id="time-out">Giờ kết ca</label>
-                                <input type="time" name="" id="check-out-time">
+                                <label id="time-in" > Giờ vào ca </label>
+                                <input type="time" name="timeIn" id="check-in-time">
+                                <label id="time-out"  >Giờ kết ca</label>
+                                <input type="time" name="timeOut" id="check-out-time">
+                                <button type="submit" id="btn-get-time">Tạo ca làm </button>
+
                             </form>
-                            <button id="btn-get-time">Tạo ca làm </button>
                         </div>
                     </div>
             </template>
@@ -83,4 +84,8 @@
         <Button  class="btn btn-outline-primary" id="check-in" style="align-self: center; width: 100%; height: 40px;"> Vào ca</Button>
     </div>
 </template>
+
+<script src="PopUpAddEvent.js" type="module"></script>
+<script src="calendar.js" type="module"></script>
+<!-- <script src="ultil.js" type="module"></script> -->
 </html>
