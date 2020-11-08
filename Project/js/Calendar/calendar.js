@@ -1,4 +1,4 @@
-
+import "./PopUpAddEvent.js"
 
 let today = new Date();
 let currenMonth = today.getMonth();
@@ -58,9 +58,11 @@ function showCalendar(month, year) {
         }
         // console.log(row);
         [...row.querySelectorAll("tr td")].forEach(el => {
+        
             el.onclick = (e) => {
                 if (current) {
                     current.style.backgroundColor = "white";
+                
                 }
                 // console.log(current);
                 current = e.target;

@@ -18,7 +18,6 @@ class AddEvent extends HTMLElement {
 
         this.$formAddEvent.addEventListener('submit', (e) => {
             e.preventDefault();
-
             if (e.target.timeIn.value === "") return;
             if (e.target.timeOut.value === "") return;
 
@@ -36,7 +35,8 @@ class AddEvent extends HTMLElement {
             workTime.push(timeWork);
             localStorage.setItem('timeWork', JSON.stringify(workTime));
             this.render();
-        }
+            this.addEvent();        }
+        
     }
 
     static get observedAttributes() {
@@ -95,7 +95,7 @@ class AddEvent extends HTMLElement {
                                             Year:currentYear,
                                         });
                     }
-                    if (YearWorkr != currentYear) {
+                    if (YearWork != currentYear) {
                         await firebase.firestore()
                                         .collection('TimeTables')
                                         .add({
