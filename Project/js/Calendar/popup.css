@@ -19,14 +19,16 @@ form {
 	align-items: center;
 }
 .popup {
-	margin: 70px auto;
+	margin: 250px 420px 100px;
 	padding: 20px;
 	background: #ffffff;
 	border-radius: 5px;
-	width: 85%;
-	position: relative;
+	width: 37%;
+	position: absolute;
 	transition: all 5s ease-in-out;
 	font-family: 'Gloria Hallelujah', cursive;
+	border-style: solid;
+	z-index: 2;
 }
 
 input{
@@ -37,7 +39,7 @@ input{
 	border: none;
 	box-shadow: 0 0.1rem 1.4 rem  0 rgba(86, 185, 235, 0.5);
 }
-.popup .close {
+.popup #close {
 	position: absolute;
 	top: 20px;
 	right: 30px;
@@ -48,7 +50,7 @@ input{
 	color: #333;
 }
 
-.popup .close:hover {
+.popup #close:hover {
 	color: #E5F720;
 }
 .content{

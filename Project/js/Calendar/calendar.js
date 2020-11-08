@@ -76,11 +76,13 @@ function showCalendar(month, year) {
     }
 
 }
-function closeModel() {
-    closeIcon.addEventListener("click", function (e) {
-        modal.classList.remove("show");
-    })
-}
+// function closeModel() {
+//     closeIcon.addEventListener("click", function (e) {
+//         modal.classList.remove("show");
+        
+//     })
+// }
+//Ham nay` k chay trong template
 
 function Next() {
     currentYears = (currenMonth === 11) ? currentYears + 1 : currentYears;

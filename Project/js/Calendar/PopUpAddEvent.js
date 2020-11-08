@@ -14,7 +14,11 @@ class AddEvent extends HTMLElement {
         this.$timeIn = this.shadowRoot.getElementById('check-in-time');
         this.$timeOut = this.shadowRoot.getElementById('check-out-time');
         this.$getTime = this.shadowRoot.getElementById('btn-get-time');
-        this.$list = this.shadowRoot.getElementById('list')
+        this.$list = this.shadowRoot.getElementById('list');
+        this.$close = this.shadowRoot.getElementById('close');
+         this.$close.addEventListener("click", ()=>{
+            this.$modal.style.display = "none";
+         })
 
         this.$formAddEvent.addEventListener('submit', (e) => {
             e.preventDefault();
