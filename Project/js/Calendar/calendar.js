@@ -59,11 +59,11 @@ function showCalendar(month, year) {
         }
         // console.log(row);
         [...row.querySelectorAll("tr td")].forEach(el => {
-        
+
             el.onclick = (e) => {
                 if (current) {
                     current.style.backgroundColor = "white";
-                    
+
                 }
                 // console.log(current);
                 current = e.target;
@@ -76,18 +76,18 @@ function showCalendar(month, year) {
     }
 
 }
- function closeModel(){
-    closeIcon.addEventListener("click", function(e){
+function closeModel() {
+    closeIcon.addEventListener("click", function (e) {
         modal.classList.remove("show");
-})
+    })
 }
 
- function Next() {
+function Next() {
     currentYears = (currenMonth === 11) ? currentYears + 1 : currentYears;
     currenMonth = (currenMonth + 1) % 12;
     showCalendar(currenMonth, currentYears);
 }
- function Previous() {
+function Previous() {
     currentYears = (currenMonth === 0) ? currentYears - 1 : currentYears;
     currenMonth = (currenMonth === 0) ? 11 : currenMonth - 1
     showCalendar(currenMonth, currentYears)

@@ -1,25 +1,25 @@
-export function saveTime(time){
-    localStorage.setItem('timeWork',JSON.stringify(time))
+export function saveTime(time) {
+    localStorage.setItem('timeWork', JSON.stringify(time))
 }
-export function getTime(){
+export function getTime() {
     return JSON.parse(localStorage.getItem('timeWork'));
 }
-export function timeWork(time){
+export function timeWork(time) {
 
     const totalTimeWork = JSON.parse(localStorage.getItem('totalTime'))
     var Intime = moment(time.timeIn, "HH:mm:ss");
     var Outtime = moment(time.timeOut, "HH:mm:ss");
-     let numWork = (Outtime.diff(Math.ceil(Intime),"hours","minutes"))
-    console.log( (Outtime.diff( Intime, "hours", "minutes")) );    
+    let numWork = (Outtime.diff(Math.ceil(Intime), "hours", "minutes"))
+    console.log((Outtime.diff(Intime, "hours", "minutes")));
     let workingHours = Math.round(numWork * 100) / 100;
-          console.log(workingHours);
-    
+    console.log(workingHours);
+
 }
-export function getDataDoc(doc, excepts = []){
+export function getDataDoc(doc, excepts = []) {
     let data = doc.data();
     data.DayWork = doc.DayWork;
-   for(let except of excepts){
-       delete data[except];
-   }
-   return data;
+    for (let except of excepts) {
+        delete data[except];
+    }
+    return data;
 }
