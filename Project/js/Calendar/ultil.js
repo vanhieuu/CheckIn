@@ -14,5 +14,12 @@ export function timeWork(time){
     let workingHours = Math.round(numWork * 100) / 100;
           console.log(workingHours);
     
-        
+}
+export function getDataDoc(doc, excepts = []){
+    let data = doc.data();
+    data.DayWork = doc.DayWork;
+   for(let except of excepts){
+       delete data[except];
+   }
+   return data;
 }

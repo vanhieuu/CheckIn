@@ -1,4 +1,5 @@
 let $template = document.getElementById("popup-template");
+import {    getDataDoc} from "./ultil.js";
 class AddEvent extends HTMLElement {
     index = 1;
     constructor() {
@@ -53,6 +54,57 @@ class AddEvent extends HTMLElement {
         console.log(name, old, newVal);
 
     }
+    async addEvent(){
+        var newDay = new Date();
+        var currentDay = String(newDay.getDate()).padStart(2, '0');
+        var currentMonth = String(newDay.getMonth() + 1).padStart(2, '0');
+        var currentYear = newDay.getFullYear();
+        var toDay = currentDay + '/' + currentMonth + '/' + currentYear; 
+        let timeWork = JSON.parse(localStorage.getItem('timeWork'));
+         var MonthWork = getDataDoc(result.doc[0], ['TimeTable'])
+            var YearWork = getDataDoc(result.doc[0],['TimeTable','Month'])
+            let result = await firebase
+                                    .firestore()
+                                    .collection('TimeTables')
+                                    .where('TimeWork', "==", timeWork[0])
+                                    .get()
+                    if(result.empty){
+                        let newDayWork = await firebase
+                                                    .firestore()
+                                                    .collection('TimeTables')
+                                                    .add({
+                
+                                                        Month:currentMonth,
+                                                        Time:timeWork[0],
+                                                        Year:currentYear
+                                                    });
+                                            await firebase.firestore()
+                                                        .collection('TimeTables')
+                                                        .add({
+                                                            Time:[],
+                                                            Month:currentMonth,
+                                                            Year:currentYear
+                                                        })
+                    }
+                    if (MonthWork != currentMonth ) {
+                        await firebase.firestore()
+                                        .collection('TimeTables')
+                                        .add({
+                                            Month:currentMonth,
+                                            Time:[],
+                                            Year:currentYear,
+                                        });
+                    }
+                    if (YearWorkr != currentYear) {
+                        await firebase.firestore()
+                                        .collection('TimeTables')
+                                        .add({
+                                            Month:currentMonth,
+                                            Time:[],
+                                            Year:currentYear,
+                                        });
+                    }
+    }
     render() {
         if (JSON.parse(localStorage.getItem('timeWork')).length > 0) {
             let data = JSON.parse(localStorage.getItem('timeWork'));
@@ -64,7 +116,47 @@ class AddEvent extends HTMLElement {
                 if(this.$list){
                     alert('Bạn đã tạo ca thành công')
                 }
+                firebase
+                        .firestore()
+                        .collection('TimeTables')
+                        .doc(this.getAttribute('Time'))
+                        .update({
+                            Time:this.$list
+                        })
         }
     }
+    totalTimeWork(){
+      
+        const totalTimeWork = JSON.parse(localStorage.getItem('timeWork'));
+                // for (const key in totalTimeWork) {
+                //     if (totalTimeWork.hasOwnProperty(key)) {
+                //         const time = totalTimeWork[key];
+                //         console.log(time);
+                //     }
+                // }
+                let getTimeIn = totalTimeWork[0].timeIn;
+                let getTimeOut = totalTimeWork[0].timeOut
+        var Intime = moment(getTimeIn, "HH:mm:ss");
+        var Outtime = moment(getTimeOut , "HH:mm:ss");
+         let numWork = (Outtime.diff(Math.ceil(Intime),"hours","minutes"))
+        console.log( (Outtime.diff( Intime, "hours", "minutes")) );    
+        let workingHours = Math.round(numWork * 100) / 100;
+        console.log(workingHours);
+            localStorage.setItem('range',workingHours)
+            firebase
+            .firestore()
+            .collection('TimeTable')
+            .doc(this.getAttribute('TimeWork'))
+            .update({
+                'Range' : localStorage.getItem('range')
+            })
+    }
+    // updateFireBase(){
+    //     let result = await firebase
+    //                         .firestore()
+    //                         .collection('TimeTable')
+    //                         .doc(this.getAttribute('TimeWork'))
+    //                         .get();
+    // }
 }
 window.customElements.define('show-pop-up', AddEvent)
