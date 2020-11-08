@@ -1,9 +1,10 @@
-import "./PopUpAddEvent.js"
+
 
 let today = new Date();
 let currenMonth = today.getMonth();
 let currentYears = today.getFullYear();
 let modal = document.getElementById('popup');
+let closeIcon = document.querySelector(".close")
 let current = null;
 let months = ["Jan"
     , "Feb"
@@ -62,7 +63,7 @@ function showCalendar(month, year) {
             el.onclick = (e) => {
                 if (current) {
                     current.style.backgroundColor = "white";
-                
+                    
                 }
                 // console.log(current);
                 current = e.target;
@@ -75,13 +76,18 @@ function showCalendar(month, year) {
     }
 
 }
+ function closeModel(){
+    closeIcon.addEventListener("click", function(e){
+        modal.classList.remove("show");
+})
+}
 
-function Next() {
+ function Next() {
     currentYears = (currenMonth === 11) ? currentYears + 1 : currentYears;
     currenMonth = (currenMonth + 1) % 12;
     showCalendar(currenMonth, currentYears);
 }
-function Previous() {
+ function Previous() {
     currentYears = (currenMonth === 0) ? currentYears - 1 : currentYears;
     currenMonth = (currenMonth === 0) ? 11 : currenMonth - 1
     showCalendar(currenMonth, currentYears)

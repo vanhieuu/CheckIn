@@ -61,8 +61,9 @@ class AddEvent extends HTMLElement {
         var currentYear = newDay.getFullYear();
         var toDay = currentDay + '/' + currentMonth + '/' + currentYear; 
         let timeWork = JSON.parse(localStorage.getItem('timeWork'));
-         var MonthWork = getDataDoc(result.doc[0], ['TimeTable'])
-            var YearWork = getDataDoc(result.doc[0],['TimeTable','Month'])
+         var MonthWork = getDataDoc(result.doc[0], ['Time'])
+            var YearWork = getDataDoc(result.doc[0],['Time','Month'])
+            var DayWork = getDataDoc(result.doc[0],['Day','Year','Time'])
             let result = await firebase
                                     .firestore()
                                     .collection('TimeTables')
@@ -73,23 +74,27 @@ class AddEvent extends HTMLElement {
                                                     .firestore()
                                                     .collection('TimeTables')
                                                     .add({
-                
+                                                        Day : currentDay,
                                                         Month:currentMonth,
                                                         Time:timeWork[0],
                                                         Year:currentYear
                                                     });
+                                }else{
                                             await firebase.firestore()
                                                         .collection('TimeTables')
                                                         .add({
+                                                            Day : currentDay,
                                                             Time:[],
                                                             Month:currentMonth,
                                                             Year:currentYear
                                                         })
-                    }
-                    if (MonthWork != currentMonth ) {
+                                }
+                    
+                    if (MonthWork != currentMonth && DayWork === currentDay) {
                         await firebase.firestore()
                                         .collection('TimeTables')
                                         .add({
+                                            Day : currentDay,
                                             Month:currentMonth,
                                             Time:[],
                                             Year:currentYear,
