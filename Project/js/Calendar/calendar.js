@@ -59,13 +59,13 @@ function showCalendar(month, year) {
         // console.log(row);
         [...row.querySelectorAll("tr td")].forEach(el => {
             el.onclick = (e) => {
-                if(current) {
-                   current.style.backgroundColor = "white";
+                if (current) {
+                    current.style.backgroundColor = "white";
                 }
                 // console.log(current);
                 current = e.target;
                 modal.setAttribute("show", "true")
-                e.target.style.backgroundColor = e.target.style.backgroundColor ==='yellow' ? 'white' : "yellow";
+                e.target.style.backgroundColor = e.target.style.backgroundColor === 'yellow' ? 'white' : "yellow";
 
             }
         })

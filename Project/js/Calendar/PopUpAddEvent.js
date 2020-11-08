@@ -14,7 +14,7 @@ class AddEvent extends HTMLElement {
         this.$timeOut = this.shadowRoot.getElementById('check-out-time');
         this.$getTime = this.shadowRoot.getElementById('btn-get-time');
         this.$list = this.shadowRoot.getElementById('list')
-      
+
         this.$formAddEvent.addEventListener('submit', (e) => {
             e.preventDefault();
 
@@ -56,15 +56,15 @@ class AddEvent extends HTMLElement {
     render() {
         if (JSON.parse(localStorage.getItem('timeWork')).length > 0) {
             let data = JSON.parse(localStorage.getItem('timeWork'));
-            
-            let htmlParse = data.sort((time1, time2) => time1 - time2).map((element) => {
-                return `<li>Ca ${this.index++} : ${element.timeIn}-${element.timeOut}</li>`
+             this.$list.innerHTML = data
+            .map(time => {
+                return `<li>Ca ${this.index++} : ${time.timeIn}-${time.timeOut}</li>`
             }).join("");
-            this.$list.appendChild(htmlParse);
+            localStorage.setItem('timeWork',JSON.stringify(data));
+                if(this.$list){
+                    alert('Bạn đã tạo ca thành công')
+                }
         }
-    }
-    convertMoment(time){
-        return moment(time)
     }
 }
 window.customElements.define('show-pop-up', AddEvent)
