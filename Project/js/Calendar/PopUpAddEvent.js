@@ -2,6 +2,7 @@ let $template = document.getElementById("popup-template");
 import { getDataDoc } from "./ultil.js";
 class AddEvent extends HTMLElement {
     index = 1;
+    current = null;
     constructor() {
         super()
         if (!localStorage.getItem('timeWork')) {
@@ -24,7 +25,7 @@ class AddEvent extends HTMLElement {
             e.preventDefault();
             if (e.target.timeIn.value === "") return;
             if (e.target.timeOut.value === "") return;
-                this.$getTime.style.display = 'block'
+            this.$getTime.style.display = 'block'
         })
         this.$formAddEvent.onsubmit = (event) => {
             event.preventDefault();
@@ -37,9 +38,9 @@ class AddEvent extends HTMLElement {
             };
 
             workTime.push(timeWork);
-            localStorage.setItem('timeWork', JSON.stringify(workTime));
             this.addEvent();
             this.render();
+            localStorage.setItem('timeWork', JSON.stringify(workTime));
         }
 
     }
@@ -66,26 +67,29 @@ class AddEvent extends HTMLElement {
         var currentYear = newDay.getFullYear();
         var toDay = currentDay + '/' + currentMonth + '/' + currentYear;
         let timeWork = JSON.parse(localStorage.getItem('timeWork'));
-        var MonthWork = getDataDoc(result.doc[0], ['Time'])
-        var YearWork = getDataDoc(result.doc[0], ['Time', 'Month'])
+       
         let result = await firebase
             .firestore()
-            .collection('TimeTables').doc()
-            .where('TimeWork', "==", timeWork[0])
+            .collection('TimeTables').doc(this.getAttribute('Time'))
+            .where('Time', "==", timeWork[0])
             .get()
+            console.log(getDataDoc(result.docs[0],['Time']));
+            var MonthWork = getDataDoc(result.docs[0], ['Time']);
+            var YearWork = getDataDoc(result.docs[0], ['Time', 'Month']);
         if (result.empty) {
             let newDayWork = await firebase
                 .firestore()
-                .collection('TimeTables')
+                .collection("TimeTables")
                 .add({
-                    Day:currentDay,
+                    Day: currentDay,
                     Month: currentMonth,
                     Time: timeWork[0],
                     Year: currentYear
                 });
         } else {
+            
             await firebase.firestore()
-                .collection('TimeTables')
+                .collection("TimeTables")
                 .add({
                     Day: currentDay,
                     Time: [],
@@ -94,9 +98,9 @@ class AddEvent extends HTMLElement {
                 })
         }
 
-        if (MonthWork != currentMonth ) {
+        if (MonthWork != currentMonth) {
             await firebase.firestore()
-                .collection('TimeTables')
+                .collection("TimeTables")
                 .add({
                     Day: currentDay,
                     Month: currentMonth,
@@ -121,18 +125,21 @@ class AddEvent extends HTMLElement {
                 .map(time => {
                     return `<li>Ca ${this.index++} : ${time.timeIn}-${time.timeOut}</li>`
                 }).join("");
+
+          
             localStorage.setItem('timeWork', JSON.stringify(data));
             if (this.$list) {
                 alert('Bạn đã tạo ca thành công')
             }
             firebase
                 .firestore()
-                .collection('TimeTables')
+                .collection("TimeTables")
                 .doc(this.getAttribute('Time'))
                 .update({
                     Time: data
                 })
         }
+        
     }
     totalTimeWork() {
 
@@ -154,8 +161,8 @@ class AddEvent extends HTMLElement {
         localStorage.setItem('range', workingHours)
         firebase
             .firestore()
-            .collection('TimeTable')
-            .doc(this.getAttribute('TimeWork'))
+            .collection("TimeTable")
+            .doc(this.getAttribute('Time'))
             .update({
                 'Range': localStorage.getItem('range')
             })

@@ -1,6 +1,5 @@
 
-var x, i, j, l, ll, selElmnt, a, b, c
-x = document.getElementsByClassName("custom-select");
+
 let today = new Date();
 let currenMonth = today.getMonth();
 let currentYears = today.getFullYear();
@@ -60,7 +59,10 @@ function showCalendar(month, year) {
         }
         // console.log(row);
         [...row.querySelectorAll("tr td")].forEach(el => {
-
+                    // let work = JSON.parse(localStorage.getItem('timeWork'));
+                    //         if(work != ""){
+                    //             el.innerHTML = work;
+                            // }
             el.onclick = (e) => {
                 if (current) {
                     current.style.backgroundColor = "white";

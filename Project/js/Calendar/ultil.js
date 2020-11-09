@@ -17,6 +17,7 @@ export function timeWork(time) {
 }
 export function getDataDoc(doc, excepts = []) {
     let data = doc.data();
+    data.Time = doc.Time;
     data.DayWork = doc.DayWork;
     for (let except of excepts) {
         delete data[except];
