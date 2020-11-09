@@ -16,15 +16,15 @@ class AddEvent extends HTMLElement {
         this.$getTime = this.shadowRoot.getElementById('btn-get-time');
         this.$list = this.shadowRoot.getElementById('list');
         this.$close = this.shadowRoot.getElementById('close');
-         this.$close.addEventListener("click", ()=>{
+        this.$close.addEventListener("click", () => {
             this.$modal.style.display = "none";
-         })
+        })
 
         this.$formAddEvent.addEventListener('submit', (e) => {
             e.preventDefault();
             if (e.target.timeIn.value === "") return;
             if (e.target.timeOut.value === "") return;
-
+                this.$getTime.style.display = 'block'
         })
         this.$formAddEvent.onsubmit = (event) => {
             event.preventDefault();
@@ -38,8 +38,8 @@ class AddEvent extends HTMLElement {
 
             workTime.push(timeWork);
             localStorage.setItem('timeWork', JSON.stringify(workTime));
-            this.render();
             this.addEvent();
+            this.render();
         }
 
     }
@@ -68,10 +68,9 @@ class AddEvent extends HTMLElement {
         let timeWork = JSON.parse(localStorage.getItem('timeWork'));
         var MonthWork = getDataDoc(result.doc[0], ['Time'])
         var YearWork = getDataDoc(result.doc[0], ['Time', 'Month'])
-        var DayWork = getDataDoc(result.doc[0], ['Day', 'Year', 'Time'])
         let result = await firebase
             .firestore()
-            .collection('TimeTables')
+            .collection('TimeTables').doc()
             .where('TimeWork', "==", timeWork[0])
             .get()
         if (result.empty) {
@@ -79,7 +78,7 @@ class AddEvent extends HTMLElement {
                 .firestore()
                 .collection('TimeTables')
                 .add({
-                    Day: currentDay,
+                    Day:currentDay,
                     Month: currentMonth,
                     Time: timeWork[0],
                     Year: currentYear
@@ -95,13 +94,13 @@ class AddEvent extends HTMLElement {
                 })
         }
 
-        if (MonthWork != currentMonth && DayWork === currentDay) {
+        if (MonthWork != currentMonth ) {
             await firebase.firestore()
                 .collection('TimeTables')
                 .add({
                     Day: currentDay,
                     Month: currentMonth,
-                    Time: [],
+                    Time: [0],
                     Year: currentYear,
                 });
         }
@@ -110,7 +109,7 @@ class AddEvent extends HTMLElement {
                 .collection('TimeTables')
                 .add({
                     Month: currentMonth,
-                    Time: [],
+                    Time: [0],
                     Year: currentYear,
                 });
         }
@@ -131,7 +130,7 @@ class AddEvent extends HTMLElement {
                 .collection('TimeTables')
                 .doc(this.getAttribute('Time'))
                 .update({
-                    Time: this.$list
+                    Time: data
                 })
         }
     }

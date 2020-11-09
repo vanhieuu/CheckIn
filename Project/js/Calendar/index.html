@@ -60,6 +60,7 @@
                 
         </div>
     </div>
+                <check-in></check-in>
 
   
     <script src="https://momentjs.com/downloads/moment-with-locales.min.js"></script>
@@ -90,9 +91,20 @@
             </template>
 <template id="check-in-template">
     <link rel="stylesheet prefetch" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.1/css/font-awesome.min.css">
+    <link rel="stylesheet" href="customSelect.css">
     <div>
+        <div class="box">
+            <select>
+              <option>7:00 - 15:00</option>
+              <option>15:00 - 23:00</option>
+              <option>7:00 - 12:30</option>
+              <option>12:30 - 18:00</option>
+              <option>18:00 - 23:00</option>
+              <option>19:00 - 23:00</option>
+            </select>
+          </div>
         <label>
-            <input type="date">
+            <input type="text" id="time-work">
         </label>
         <Button  class="btn btn-outline-primary" id="check-in" style="align-self: center; width: 100%; height: 40px;"> Vào ca</Button>
     </div>
