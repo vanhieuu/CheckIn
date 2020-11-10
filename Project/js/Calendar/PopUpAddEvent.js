@@ -1,5 +1,5 @@
 let $template = document.getElementById("popup-template");
-import { getDataDoc } from "./ultil.js";
+import { getDataDoc, timeWork } from "./ultil.js";
 class AddEvent extends HTMLElement {
     index = 1;
     current = null;
@@ -23,16 +23,17 @@ class AddEvent extends HTMLElement {
         this.$getTime = this.shadowRoot.getElementById('btn-get-time');
         this.$list = this.shadowRoot.getElementById('list');
         this.$close = this.shadowRoot.getElementById('close');
+        this.$error = this.shadowRoot.getElementById('input-error')
         this.$close.addEventListener("click", () => {
             this.$modal.style.display = "none";
         })
-           
+          
         this.$formAddEvent.addEventListener('submit', (e) => {
             e.preventDefault();
             if (e.target.timeIn.value === "") return;
             if (e.target.timeOut.value === "") return;
-            this.$getTime.style.display = 'block'
-            this.addEvent();
+            this.$getTime.style.display = 'block';
+        
         })
         this.$formAddEvent.onsubmit = (event) => {
             event.preventDefault();
@@ -49,11 +50,16 @@ class AddEvent extends HTMLElement {
             this.render();
             // let time = localStorage.setItem('timeWork', JSON.stringify(workTime));
         }
+        this.$formAddEvent.onsubmit = (event) =>{
+            event.preventDefault();
+            this.addWork();
+            
+        }
 
     }
 
     static get observedAttributes() {
-        return ['show'];
+        return ['show','error'];
     }
     attributeChangedCallback(name, old, newVal) {
         if (name == 'show') {
@@ -63,12 +69,16 @@ class AddEvent extends HTMLElement {
             } else {
                 this.$modal.style.display = 'block';
             }
+        
+        }else if(name == 'error'){
+            this.$error.innerHTML = newVal
         }
-        console.log(name, old, newVal);
+        // console.log(name, old, newVal);
 
+        
     }
     set List(list){
-        this.$list = this.list
+        this.list = list
         this.render();
             }
 
@@ -96,9 +106,16 @@ class AddEvent extends HTMLElement {
                     }
     
     }
-    update(){
-        
-    }
+    // update(list){
+    //     this.list.push(list)
+    //     this.render()
+    //         firebase.firestore()
+    //                             .collection('TimeTables')
+    //                             .doc(this.getAttribute('Month'))
+    //                             .update({
+    //                                 Time:this.list
+    //                             });
+
     render() {
         if (JSON.parse(localStorage.getItem('timeWork')).length > 0) {
             let data = JSON.parse(localStorage.getItem('timeWork'));
@@ -106,12 +123,9 @@ class AddEvent extends HTMLElement {
                 .map(time => {
                     return `<li>Ca ${this.index++} : ${time.timeIn}-${time.timeOut}</li>`
                 }).join("");
-
-            localStorage.setItem('timeWork', JSON.stringify(data));
-            if (this.$list) {
+            if (this.$list != "") {
                 alert('Bạn đã tạo ca thành công')
             }
-
         }
         
     }
@@ -124,13 +138,13 @@ class AddEvent extends HTMLElement {
             this.render();
             firebase.firestore()
                     .collection("WorkCalendar")
-                    .doc(this.getAttribute("Day"))
+                    .doc(this.getAttribute("Month"))
                     .update({
                             Time: this.list
                     });
                     
     }
-    totalTimeWork(Intime,Outtime) {
+    totalTimeWork(Intime,Outtime){
 
         const totalTimeWork = JSON.parse(localStorage.getItem('timeWork'));
         for (const key in totalTimeWork) {
@@ -149,7 +163,19 @@ class AddEvent extends HTMLElement {
         return range = workingHours;
     }       
         }
+        }
+    validate(timeIn, timeOut){
+        let isPassed = true
+            if(timeIn == ""){
+                this.$timeIn.error = "Chọn thời gian"
+                alert('Vui lòng chọn thời gian ');
+                isPassed = false;
+            }else if (timeOut == ""){
+                this.$timeOut.error = "Chọn thời gian"
+            }
+            return isPassed
     }
+    
     // updateFireBase(){
     //     let result = await firebase
     //                         .firestore()
@@ -157,5 +183,6 @@ class AddEvent extends HTMLElement {
     //                         .doc(this.getAttribute('TimeWork'))
     //                         .get();
     // }
-}
+    }
+
 window.customElements.define('show-pop-up', AddEvent)

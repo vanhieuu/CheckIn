@@ -34,7 +34,7 @@ function showCalendar(month, year) {
 
     let date = 1;
     for (let i = 0; i < 6; i++) {
-        let row = document.createElement('tr');
+        var row = document.createElement('tr');
         for (let j = 0; j < 7; j++) {
             if (i === 0 && j < firstDay) {
                 let cell = document.createElement("td");
@@ -63,12 +63,6 @@ function showCalendar(month, year) {
         // console.log(row);
         [...row.querySelectorAll("tr td")].forEach(el => {
                     
-                    let smallTime  = work.split(['timeIn', '\\'],3)
-                    // let smallTime  = work.split(["timeIn","timeOut","\\"]);
-                  
-                    //         if(work != ""){
-                    //             el.innerHTML = work;
-                            // }
             el.onclick = (e) => {
                 if (current) {
                     current.style.backgroundColor = "white";
@@ -79,17 +73,11 @@ function showCalendar(month, year) {
                 modal.setAttribute("show", "true")
                 e.target.style.backgroundColor = e.target.style.backgroundColor === 'yellow' ? 'white' : "yellow";
                 // Hiển thị giờ làm lên lịch 
-                if (date === today.getDate() && year === today.getFullYear() && month === today.getMonth()) {
-                    e.target.innerHTML = `${dd} - ${smallTime} `;
-                }
-                else{
-                    e.target.innerHTML = `${el.innerHTML} - ${smallTime}`
-                }
             }
         })
         tbl.appendChild(row)
     }
-
+// [...row]
 }
 // function closeModel() {
 //     closeIcon.addEventListener("click", function (e) {
