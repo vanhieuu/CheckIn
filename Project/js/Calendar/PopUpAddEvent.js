@@ -4,6 +4,11 @@ class AddEvent extends HTMLElement {
     index = 1;
     current = null;
     list = [];
+    newDay = new Date();
+    currentDay = String(this.newDay.getDate()).padStart(2, '0');
+    currentMonth = String(this.newDay.getMonth() + 1).padStart(2, '0');
+    currentYear = this.newDay.getFullYear();
+    toDay = this.currentDay + '/' + this.currentMonth + '/' + this.currentYear;
     constructor() {
         super()
         if (!localStorage.getItem('timeWork')) {
@@ -21,23 +26,25 @@ class AddEvent extends HTMLElement {
         this.$close.addEventListener("click", () => {
             this.$modal.style.display = "none";
         })
-
+           
         this.$formAddEvent.addEventListener('submit', (e) => {
             e.preventDefault();
             if (e.target.timeIn.value === "") return;
             if (e.target.timeOut.value === "") return;
             this.$getTime.style.display = 'block'
+            this.addEvent();
         })
         this.$formAddEvent.onsubmit = (event) => {
             event.preventDefault();
             const timeIn = this.$timeIn.value;
             const timeOut = this.$timeOut.value;
             const timeWork = {
+
                 timeIn: timeIn,
-                timeOut: timeOut
+                timeOut: timeOut,
             };
-            localStorage.setItem('workTime',JSON.stringify(timeWork));
-            const workTime = JSON.parse(localStorage.getItem('workTime')) || [];
+            localStorage.setItem('timeWork',JSON.stringify(timeWork));
+            // const workTime = JSON.parse(localStorage.getItem('timeWork')) || [];
             // this.addEvent();
             this.render();
             // let time = localStorage.setItem('timeWork', JSON.stringify(workTime));
@@ -60,42 +67,34 @@ class AddEvent extends HTMLElement {
         console.log(name, old, newVal);
 
     }
-    async addEvent() {
-        var newDay = new Date();
-        var currentDay = String(newDay.getDate()).padStart(2, '0');
-        var currentMonth = String(newDay.getMonth() + 1).padStart(2, '0');
-        var currentYear = newDay.getFullYear();
-        var toDay = currentDay + '/' + currentMonth + '/' + currentYear;
-        let timeWork = JSON.stringify(localStorage.getItem('timeWork'));
-       
-        let result = await firebase
-            .firestore()
-            .collection('WorkCalendar').doc(this.getAttribute('Day'))
-            .where('Day', "==", currentDay)
-            .get()
-            console.log(getDataDoc(result.docs[0],['Time']));
-            var MonthWork = getDataDoc(result.docs[0], ['Time']);
-            var YearWork = getDataDoc(result.docs[0], ['Time', 'Month']);
-        if (result.empty) {
-            let newDayWork = await firebase
-                .firestore()
-                .collection("WorkCalendar")
-                .add({
-                    Month: currentMonth,
-                    Time: timeWork[0],
-                    Year: currentYear
-                });
-        } else {
-            
-            await firebase.firestore()
-                .collection("TimeTables")
-                .add({
-                    Time: [],
-                    Month: currentMonth,
-                    Year: currentYear
-                })
-        }
+    set List(list){
+        this.$list = this.list
+        this.render();
+            }
 
+       async  addEvent(list) {
+        let  Month = this.currentMonth
+        let timeWork = JSON.stringify(localStorage.getItem('timeWork'));
+        let result = await firebase
+                                .firestore()
+                                .collection('WorkCalendar')
+                                .where('Month' ,'==', Month)
+                                .get()
+                    if(result.empty){
+                        let newMonthWork = await firebase.firestore().collection('WorkCalendar').add({
+                                        Month:this.currentMonth,
+                                        Time:list,
+                                        Year: this.currentYear
+                        })
+                        await firebase.firestore()
+                                        .collection('Time-Tables')
+                                        .add({
+                                                Time:[],
+                                                Month:this.currenMonth,
+                                                Year:this.currentYear
+                                        })
+                    }
+    
     }
     update(){
         
@@ -124,38 +123,32 @@ class AddEvent extends HTMLElement {
             this.list.push(list);
             this.render();
             firebase.firestore()
-                    .collection("TimeTables")
+                    .collection("WorkCalendar")
                     .doc(this.getAttribute("Day"))
                     .update({
                             Time: this.list
                     });
                     
     }
-    totalTimeWork() {
+    totalTimeWork(Intime,Outtime) {
 
         const totalTimeWork = JSON.parse(localStorage.getItem('timeWork'));
-        // for (const key in totalTimeWork) {
-        //     if (totalTimeWork.hasOwnProperty(key)) {
-        //         const time = totalTimeWork[key];
+        for (const key in totalTimeWork) {
+            if (totalTimeWork.hasOwnProperty(key)) {
+                const time = totalTimeWork[key];
         //         console.log(time);
-        //     }
-        // }
-        let getTimeIn = totalTimeWork[0].timeIn;
-        let getTimeOut = totalTimeWork[0].timeOut
-        var Intime = moment(getTimeIn, "HH:mm:ss");
-        var Outtime = moment(getTimeOut, "HH:mm:ss");
+            
+        
+        let getTimeIn = time[0].timeIn;
+        let getTimeOut = time[0].timeOut
+         Intime = moment(getTimeIn, "HH:mm:ss");
+         Outtime = moment(getTimeOut, "HH:mm:ss");
         let numWork = (Outtime.diff(Math.ceil(Intime), "hours", "minutes"))
-        console.log((Outtime.diff(Intime, "hours", "minutes")));
+        // console.log((Outtime.diff(Intime, "hours", "minutes")));
         let workingHours = Math.round(numWork * 100) / 100;
-        console.log(workingHours);
-        localStorage.setItem('range', workingHours)
-        firebase
-            .firestore()
-            .collection("TimeTable")
-            .doc(this.getAttribute('Time'))
-            .update({
-                'Range': localStorage.getItem('range')
-            })
+        return range = workingHours;
+    }       
+        }
     }
     // updateFireBase(){
     //     let result = await firebase
