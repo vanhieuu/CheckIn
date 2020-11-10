@@ -24,3 +24,4 @@ export function getDataDoc(doc, excepts = []) {
     }
     return data;
 }
+

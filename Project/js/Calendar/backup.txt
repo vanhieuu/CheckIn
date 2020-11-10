@@ -1,0 +1,37 @@
+   async addEvent() {
+        var newDay = new Date();
+        var currentDay = String(newDay.getDate()).padStart(2, '0');
+        var currentMonth = String(newDay.getMonth() + 1).padStart(2, '0');
+        var currentYear = newDay.getFullYear();
+        var toDay = currentDay + '/' + currentMonth + '/' + currentYear;
+        let timeWork = JSON.stringify(localStorage.getItem('timeWork'));
+       
+        let result = await firebase
+            .firestore()
+            .collection('TimeTables').doc(this.getAttribute('Day'))
+            .where('Day', "==", currentDay)
+            .get()
+            console.log(getDataDoc(result.docs[0],['Time']));
+            var MonthWork = getDataDoc(result.docs[0], ['Time']);
+            var YearWork = getDataDoc(result.docs[0], ['Time', 'Month']);
+        if (result.empty) {
+            let newDayWork = await firebase
+                .firestore()
+                .collection("TimeTables")
+                .add({
+                    Month: currentMonth,
+                    Time: timeWork[0],
+                    Year: currentYear
+                });
+        } else {
+            
+            await firebase.firestore()
+                .collection("TimeTables")
+                .add({
+                    Time: [],
+                    Month: currentMonth,
+                    Year: currentYear
+                })
+        }
+
+    }

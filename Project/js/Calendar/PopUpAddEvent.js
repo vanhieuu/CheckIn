@@ -32,14 +32,13 @@ class AddEvent extends HTMLElement {
             event.preventDefault();
             const timeIn = this.$timeIn.value;
             const timeOut = this.$timeOut.value;
-            const workTime = JSON.parse(localStorage.getItem('workTime')) || [];
             const timeWork = {
                 timeIn: timeIn,
                 timeOut: timeOut
             };
-
-            workTime.push(timeWork);
-            this.addEvent();
+            localStorage.setItem('workTime',JSON.stringify(timeWork));
+            const workTime = JSON.parse(localStorage.getItem('workTime')) || [];
+            // this.addEvent();
             this.render();
             // let time = localStorage.setItem('timeWork', JSON.stringify(workTime));
         }
@@ -71,7 +70,7 @@ class AddEvent extends HTMLElement {
        
         let result = await firebase
             .firestore()
-            .collection('TimeTables').doc(this.getAttribute('Day'))
+            .collection('WorkCalendar').doc(this.getAttribute('Day'))
             .where('Day', "==", currentDay)
             .get()
             console.log(getDataDoc(result.docs[0],['Time']));
@@ -80,7 +79,7 @@ class AddEvent extends HTMLElement {
         if (result.empty) {
             let newDayWork = await firebase
                 .firestore()
-                .collection("TimeTables")
+                .collection("WorkCalendar")
                 .add({
                     Month: currentMonth,
                     Time: timeWork[0],
@@ -97,6 +96,9 @@ class AddEvent extends HTMLElement {
                 })
         }
 
+    }
+    update(){
+        
     }
     render() {
         if (JSON.parse(localStorage.getItem('timeWork')).length > 0) {
