@@ -3,6 +3,7 @@ import { getDataDoc } from "./ultil.js";
 class AddEvent extends HTMLElement {
     index = 1;
     current = null;
+    list = [];
     constructor() {
         super()
         if (!localStorage.getItem('timeWork')) {
@@ -40,7 +41,7 @@ class AddEvent extends HTMLElement {
             workTime.push(timeWork);
             this.addEvent();
             this.render();
-            localStorage.setItem('timeWork', JSON.stringify(workTime));
+            // let time = localStorage.setItem('timeWork', JSON.stringify(workTime));
         }
 
     }
@@ -66,12 +67,12 @@ class AddEvent extends HTMLElement {
         var currentMonth = String(newDay.getMonth() + 1).padStart(2, '0');
         var currentYear = newDay.getFullYear();
         var toDay = currentDay + '/' + currentMonth + '/' + currentYear;
-        let timeWork = JSON.parse(localStorage.getItem('timeWork'));
+        let timeWork = JSON.stringify(localStorage.getItem('timeWork'));
        
         let result = await firebase
             .firestore()
-            .collection('TimeTables').doc(this.getAttribute('Time'))
-            .where('Time', "==", timeWork[0])
+            .collection('TimeTables').doc(this.getAttribute('Day'))
+            .where('Day', "==", currentDay)
             .get()
             console.log(getDataDoc(result.docs[0],['Time']));
             var MonthWork = getDataDoc(result.docs[0], ['Time']);
@@ -81,7 +82,6 @@ class AddEvent extends HTMLElement {
                 .firestore()
                 .collection("TimeTables")
                 .add({
-                    Day: currentDay,
                     Month: currentMonth,
                     Time: timeWork[0],
                     Year: currentYear
@@ -91,32 +91,12 @@ class AddEvent extends HTMLElement {
             await firebase.firestore()
                 .collection("TimeTables")
                 .add({
-                    Day: currentDay,
                     Time: [],
                     Month: currentMonth,
                     Year: currentYear
                 })
         }
 
-        if (MonthWork != currentMonth) {
-            await firebase.firestore()
-                .collection("TimeTables")
-                .add({
-                    Day: currentDay,
-                    Month: currentMonth,
-                    Time: [0],
-                    Year: currentYear,
-                });
-        }
-        if (YearWork != currentYear) {
-            await firebase.firestore()
-                .collection('TimeTables')
-                .add({
-                    Month: currentMonth,
-                    Time: [0],
-                    Year: currentYear,
-                });
-        }
     }
     render() {
         if (JSON.parse(localStorage.getItem('timeWork')).length > 0) {
@@ -126,20 +106,28 @@ class AddEvent extends HTMLElement {
                     return `<li>Ca ${this.index++} : ${time.timeIn}-${time.timeOut}</li>`
                 }).join("");
 
-          
             localStorage.setItem('timeWork', JSON.stringify(data));
             if (this.$list) {
                 alert('Bạn đã tạo ca thành công')
             }
-            firebase
-                .firestore()
-                .collection("TimeTables")
-                .doc(this.getAttribute('Time'))
-                .update({
-                    Time: data
-                })
+
         }
         
+    }
+    setWork(list){
+        this.$list = list
+        this.render()
+    }
+    addWork(list){
+            this.list.push(list);
+            this.render();
+            firebase.firestore()
+                    .collection("TimeTables")
+                    .doc(this.getAttribute("Day"))
+                    .update({
+                            Time: this.list
+                    });
+                    
     }
     totalTimeWork() {
 

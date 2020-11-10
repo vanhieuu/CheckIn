@@ -1,6 +1,7 @@
 
 
 let today = new Date();
+var dd = String(today.getDate()).padStart(2, '0');
 let currenMonth = today.getMonth();
 let currentYears = today.getFullYear();
 let modal = document.getElementById('popup');
@@ -50,6 +51,7 @@ function showCalendar(month, year) {
                 let cellText = document.createTextNode(date);
                 if (date === today.getDate() && year === today.getFullYear() && month === today.getMonth()) {
                     cell.classList.add("bg-info");
+                    // cell.classList.add('timeWork')
                 }
                 cell.appendChild(cellText);
                 row.appendChild(cell);
@@ -57,9 +59,13 @@ function showCalendar(month, year) {
             }
 
         }
+        let work = JSON.stringify(localStorage.getItem('timeWork'));
         // console.log(row);
         [...row.querySelectorAll("tr td")].forEach(el => {
-                    // let work = JSON.parse(localStorage.getItem('timeWork'));
+                    
+                    let smallTime  = work.split(['timeIn', '\\'],3)
+                    // let smallTime  = work.split(["timeIn","timeOut","\\"]);
+                  
                     //         if(work != ""){
                     //             el.innerHTML = work;
                             // }
@@ -67,12 +73,18 @@ function showCalendar(month, year) {
                 if (current) {
                     current.style.backgroundColor = "white";
 
-                }
+                } 
                 // console.log(current);
                 current = e.target;
                 modal.setAttribute("show", "true")
                 e.target.style.backgroundColor = e.target.style.backgroundColor === 'yellow' ? 'white' : "yellow";
-
+                // Hiển thị giờ làm lên lịch 
+                if (date === today.getDate() && year === today.getFullYear() && month === today.getMonth()) {
+                    e.target.innerHTML = `${dd} - ${smallTime} `;
+                }
+                else{
+                    e.target.innerHTML = `${el.innerHTML} - ${smallTime}`
+                }
             }
         })
         tbl.appendChild(row)
