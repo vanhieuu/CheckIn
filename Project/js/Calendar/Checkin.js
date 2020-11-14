@@ -14,6 +14,7 @@ class CheckIn extends HTMLElement {
         this.attachShadow({ mode: 'open' });// Có cũng được mà không cũng được
         this.shadowRoot.appendChild($template.content.cloneNode(true));
         this.$checkIn = this.shadowRoot.getElementById('check-in');
+        this.$formCheckIn = this.shadowRoot.querySelectorAll('.check-in-form')
         this.$timeWork = this.shadowRoot.getElementById('time-work');
         this.$checkIn.onsubmit = (event) => {
             event.preventDefault()
@@ -35,11 +36,15 @@ class CheckIn extends HTMLElement {
         }
     }
     render() {
-        this.$timeWork.innerHTML = this.$timeWork;
+        if(this.timeWork){
+            this.$checkIn.innerHTML = 
+        }
 
     }
     getTimeCheckIn() {
-        localStorage.setItem('timeIn',)
+       this.$checkIn.onsubmit = (event) =>{
+                this.time
+       }
     }
     renderWork() {
         this.$checkIn != this.$checkIn;
