@@ -46,6 +46,7 @@ class AddEvent extends HTMLElement {
             };
             // const workTime = JSON.parse(localStorage.getItem('timeWork')) || [];
             this.addEvent(timeWork);
+                alert('Tạo ca làm thành công')
             this.render();
             // this.$formAddEvent.onsubmit = (event) => {
             //     event.preventDefault();
@@ -59,7 +60,7 @@ class AddEvent extends HTMLElement {
     }
 
     static get observedAttributes() {
-        return ['show', 'day']
+        return ['show', 'day','timework']
     }
     attributeChangedCallback(name, old, newVal) {
         if (name == 'show') {
@@ -75,6 +76,9 @@ class AddEvent extends HTMLElement {
             console.log(newVal);
             this.currentDay = newVal
             this.toDay = this.currentDay + '/' + this.currentMonth + '/' + this.currentYear;
+        }
+        if(name == 'timework'){
+            this.$list.innerHTML = this.list
         }
         // console.log(name, old, newVal);
 
