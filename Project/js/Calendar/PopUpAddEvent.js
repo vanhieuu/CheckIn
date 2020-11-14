@@ -59,7 +59,7 @@ class AddEvent extends HTMLElement {
     }
 
     static get observedAttributes() {
-        return ['show', 'error'];
+        return ['show', 'day']
     }
     attributeChangedCallback(name, old, newVal) {
         if (name == 'show') {
@@ -70,8 +70,11 @@ class AddEvent extends HTMLElement {
                 this.$modal.style.display = 'block';
             }
 
-        } else if (name == 'error') {
-            this.$error.innerHTML = newVal
+        }
+        if (name == 'day') {
+            console.log(newVal);
+            this.currentDay = newVal
+            this.toDay = this.currentDay + '/' + this.currentMonth + '/' + this.currentYear;
         }
         // console.log(name, old, newVal);
 
@@ -83,6 +86,7 @@ class AddEvent extends HTMLElement {
     // }
 
     async addEvent(timeWork) {
+        console.log(this.toDay);
         let month = this.currentMonth
         let year = this.currentYear;
         // let timeWork = JSON.parse(JSON.stringify(localStorage.getItem('timeWork')));
@@ -116,7 +120,7 @@ class AddEvent extends HTMLElement {
             await firebase.firestore()
                 .collection('TimeTables').doc(data.id)
                 .update({
-                    Time: [...data.data().Time,timeWork]
+                    Time: [...data.data().Time, timeWork]
                 })
         }
 

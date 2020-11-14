@@ -73,6 +73,8 @@ function showCalendar(month, year) {
                 modal.setAttribute("show", "true")
                 e.target.style.backgroundColor = e.target.style.backgroundColor === 'yellow' ? 'white' : "yellow";
                 // Hiển thị giờ làm lên lịch 
+                modal.setAttribute('day',el.innerHTML)
+        
             }
         })
         tbl.appendChild(row)
