@@ -27,39 +27,39 @@ class AddEvent extends HTMLElement {
         this.$close.addEventListener("click", () => {
             this.$modal.style.display = "none";
         })
-          
+
         this.$formAddEvent.addEventListener('submit', (e) => {
             e.preventDefault();
             if (e.target.timeIn.value === "") return;
             if (e.target.timeOut.value === "") return;
             this.$getTime.style.display = 'block';
-        
+
         })
         this.$formAddEvent.onsubmit = (event) => {
             event.preventDefault();
             const timeIn = this.$timeIn.value;
             const timeOut = this.$timeOut.value;
             const timeWork = {
-
+                Day: this.toDay,
                 timeIn: timeIn,
                 timeOut: timeOut,
             };
-            localStorage.setItem('timeWork',JSON.stringify(timeWork));
             // const workTime = JSON.parse(localStorage.getItem('timeWork')) || [];
-            // this.addEvent();
+            this.addEvent(timeWork);
             this.render();
+            // this.$formAddEvent.onsubmit = (event) => {
+            //     event.preventDefault();
+            //     // this.addWork();
+            //     this.addEvent();
+
+            // }
             // let time = localStorage.setItem('timeWork', JSON.stringify(workTime));
-        }
-        this.$formAddEvent.onsubmit = (event) =>{
-            event.preventDefault();
-            this.addWork();
-            
         }
 
     }
 
     static get observedAttributes() {
-        return ['show','error'];
+        return ['show', 'error'];
     }
     attributeChangedCallback(name, old, newVal) {
         if (name == 'show') {
@@ -69,42 +69,57 @@ class AddEvent extends HTMLElement {
             } else {
                 this.$modal.style.display = 'block';
             }
-        
-        }else if(name == 'error'){
+
+        } else if (name == 'error') {
             this.$error.innerHTML = newVal
         }
         // console.log(name, old, newVal);
 
-        
-    }
-    set List(list){
-        this.list = list
-        this.render();
-            }
 
-       async  addEvent(list) {
-        let  Month = this.currentMonth
-        let timeWork = JSON.stringify(localStorage.getItem('timeWork'));
+    }
+    // set List(list){
+    //     this.list = list
+    //     this.render();
+    // }
+
+    async addEvent(timeWork) {
+        let month = this.currentMonth
+        let year = this.currentYear;
+        // let timeWork = JSON.parse(JSON.stringify(localStorage.getItem('timeWork')));
+        console.log(timeWork);
         let result = await firebase
-                                .firestore()
-                                .collection('WorkCalendar')
-                                .where('Month' ,'==', Month)
-                                .get()
-                    if(result.empty){
-                        let newMonthWork = await firebase.firestore().collection('WorkCalendar').add({
-                                        Month:this.currentMonth,
-                                        Time:list,
-                                        Year: this.currentYear
-                        })
-                        await firebase.firestore()
-                                        .collection('Time-Tables')
-                                        .add({
-                                                Time:[],
-                                                Month:this.currenMonth,
-                                                Year:this.currentYear
-                                        })
-                    }
-    
+            .firestore()
+            .collection('WorkCalendar')
+            .where('Month', '==', month)
+            .get()
+        console.log(timeWork);
+        if (result.empty) {
+            await firebase.firestore().collection('WorkCalendar').add({
+                Month: month,
+                Year: year
+            })
+
+            await firebase.firestore()
+                .collection('TimeTables')
+                .add({
+                    Time: [timeWork],
+                    Month: month,
+                    Year: year
+                })
+        } else {
+            let result = await firebase
+                .firestore()
+                .collection('TimeTables')
+                .where('Month', '==', month)
+                .get()
+            let data = result.docs[0]
+            await firebase.firestore()
+                .collection('TimeTables').doc(data.id)
+                .update({
+                    Time: [...data.data().Time,timeWork]
+                })
+        }
+
     }
     // update(list){
     //     this.list.push(list)
@@ -127,55 +142,55 @@ class AddEvent extends HTMLElement {
                 alert('Bạn đã tạo ca thành công')
             }
         }
-        
+
     }
-    setWork(list){
+    setWork(list) {
         this.$list = list
         this.render()
     }
-    addWork(list){
-            this.list.push(list);
-            this.render();
-            firebase.firestore()
-                    .collection("WorkCalendar")
-                    .doc(this.getAttribute("Month"))
-                    .update({
-                            Time: this.list
-                    });
-                    
-    }
-    totalTimeWork(Intime,Outtime){
+    // addWork() {
+
+    //     this.render();
+    //     firebase.firestore()
+    //         .collection("WorkCalendar")
+    //         .doc(this.getAttribute("Month"))
+    //         .update({
+    //             Time: this.list
+    //         });
+
+    // }
+    totalTimeWork(Intime, Outtime) {
 
         const totalTimeWork = JSON.parse(localStorage.getItem('timeWork'));
         for (const key in totalTimeWork) {
             if (totalTimeWork.hasOwnProperty(key)) {
                 const time = totalTimeWork[key];
-        //         console.log(time);
-            
-        
-        let getTimeIn = time[0].timeIn;
-        let getTimeOut = time[0].timeOut
-         Intime = moment(getTimeIn, "HH:mm:ss");
-         Outtime = moment(getTimeOut, "HH:mm:ss");
-        let numWork = (Outtime.diff(Math.ceil(Intime), "hours", "minutes"))
-        // console.log((Outtime.diff(Intime, "hours", "minutes")));
-        let workingHours = Math.round(numWork * 100) / 100;
-        return range = workingHours;
-    }       
-        }
-        }
-    validate(timeIn, timeOut){
-        let isPassed = true
-            if(timeIn == ""){
-                this.$timeIn.error = "Chọn thời gian"
-                alert('Vui lòng chọn thời gian ');
-                isPassed = false;
-            }else if (timeOut == ""){
-                this.$timeOut.error = "Chọn thời gian"
+                //         console.log(time);
+
+
+                let getTimeIn = time[0].timeIn;
+                let getTimeOut = time[0].timeOut
+                Intime = moment(getTimeIn, "HH:mm:ss");
+                Outtime = moment(getTimeOut, "HH:mm:ss");
+                let numWork = (Outtime.diff(Math.ceil(Intime), "hours", "minutes"))
+                // console.log((Outtime.diff(Intime, "hours", "minutes")));
+                let workingHours = Math.round(numWork * 100) / 100;
+                return range = workingHours;
             }
-            return isPassed
+        }
     }
-    
+    validate(timeIn, timeOut) {
+        let isPassed = true
+        if (timeIn == "") {
+            this.$timeIn.error = "Chọn thời gian"
+            alert('Vui lòng chọn thời gian ');
+            isPassed = false;
+        } else if (timeOut == "") {
+            this.$timeOut.error = "Chọn thời gian"
+        }
+        return isPassed
+    }
+
     // updateFireBase(){
     //     let result = await firebase
     //                         .firestore()
@@ -183,6 +198,6 @@ class AddEvent extends HTMLElement {
     //                         .doc(this.getAttribute('TimeWork'))
     //                         .get();
     // }
-    }
+}
 
 window.customElements.define('show-pop-up', AddEvent)
