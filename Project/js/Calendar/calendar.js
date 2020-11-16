@@ -76,10 +76,7 @@ function showCalendar(month, year) {
                 const time = data[i];
                   for(const key in time){
                     const val = time[key]
-                        console.log(`${time['Day']}`);
-                    // console.log(`${key}: ${val}`);
                     let getDay = time['Day']
-                    console.log();
                     let timeIn = time['timeIn']
                     let timeOut = time['timeOut']
                     if (el.innerHTML == getDay) {
@@ -138,4 +135,19 @@ function Previous() {
   showCalendar(currenMonth, currentYears);
 }
 //
-//button
+//button checkin
+let $vaoCa = document.getElementById('vaoCa');
+let $ketCa = document.getElementById('ketCa');
+console.log(today.getHours() + " " + today.getMinutes());
+function a(){
+  console.log('step1');
+  //
+  $vaoCa.style.display = 'none'
+  $ketCa.style.display = 'block'
+}
+function b(){
+  console.log("step2");
+  alert("ket thuc ca lam")
+  $ketCa.style.display ="none"
+}
+
