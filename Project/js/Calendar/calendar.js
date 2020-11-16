@@ -70,17 +70,26 @@ function showCalendar(month, year) {
         .get()
         .then((snap)=>{
           snap.docs.forEach((data) =>{
-            data = snap.docs[0];
-            console.log(data.data().Time[0]);
-            let getDay = data.data().Time.Day[0]
-            let timeIn = data.data().Time.timeIn[0]
-            let timeOut = data.data().Time.timeOut[0]
-          if (el.innerHTML == getDay) {
-            var node = document.createElement("p");
-            var textnode = document.createTextNode(`${timeIn} - ${timeOut}`);
-            node.appendChild(textnode);
-            el.appendChild(node);
-          }
+            data = snap.docs[0].data().Time;
+              for(let i = 0; i < data.length; i++){
+                const time = data[i];
+                  for(const key in time){
+                    const val = time[key]
+                        console.log(`${time['Day']}`);
+                    // console.log(`${key}: ${val}`);
+                    let getDay = time['Day']
+                    console.log();
+                    let timeIn = time['timeIn']
+                    let timeOut = time['timeOut']
+                    if (el.innerHTML == getDay) {
+                      var node = document.createElement("p");
+                      var textnode = document.createTextNode(`${timeIn} - ${timeOut}`);
+                      node.appendChild(textnode);
+                      el.appendChild(node);
+                    }
+                  }
+              }
+         
           })
         })
        
