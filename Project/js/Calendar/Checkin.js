@@ -36,9 +36,7 @@ class CheckIn extends HTMLElement {
         }
     }
     render() {
-        if(this.timeWork){
-            this.$checkIn.innerHTML = 
-        }
+                
 
     }
     getTimeCheckIn() {

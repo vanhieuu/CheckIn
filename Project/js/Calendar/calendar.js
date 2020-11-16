@@ -60,13 +60,21 @@ function showCalendar(month, year) {
         date++;
       }
     }
-    let work = JSON.stringify(localStorage.getItem("timeWork"));
+    
     // console.log(row);
-    [...row.querySelectorAll("tr td")].forEach((el) => {
+    [...row.querySelectorAll("tr td")].forEach(async (el) => {
         //Hien thi gio lam len lich
-      if (el.textContent == today.getDate()) {
+        let result =  await firebase
+        .firestore()
+        .collection('TimeTables')
+        .get()
+        data = result.docs[0];
+        let getDay = data.data().Time[0].Day
+        let timeIn = data.data().Time[0].timeIn
+        let timeOut = data.data().Time[0].timeOut
+      if (el.textContent == getDay) {
         var node = document.createElement("p");
-        var textnode = document.createTextNode("Lich lam` viec");
+        var textnode = document.createTextNode(`${timeIn} - ${timeOut}`);
         node.appendChild(textnode);
         el.appendChild(node);
       }
@@ -80,9 +88,9 @@ function showCalendar(month, year) {
         modal.setAttribute("show", "true");
         e.target.style.backgroundColor =
           e.target.style.backgroundColor === "yellow" ? "white" : "yellow";
-        console.log(e.target.textContent);
-        // Hiển thị giờ làm lên lịch
-        // modal.setAttribute("day", el.innerHTML);
+        // console.log(e.target.textContent);
+        // Lyấ giá trị ngày làm 
+        modal.setAttribute("day", el.innerHTML);
       };
     });
     tbl.appendChild(row);

@@ -46,9 +46,9 @@ class AddEvent extends HTMLElement {
             };
             // const workTime = JSON.parse(localStorage.getItem('timeWork')) || [];
             this.addEvent(timeWork);
-                alert('Tạo ca làm thành công')
-            this.render();
+            alert('Tạo ca làm thành công')
             // this.$formAddEvent.onsubmit = (event) => {
+                this.render();
             //     event.preventDefault();
             //     // this.addWork();
             //     this.addEvent();
@@ -75,7 +75,7 @@ class AddEvent extends HTMLElement {
         if (name == 'day') {
             console.log(newVal);
             this.currentDay = newVal
-            this.toDay = this.currentDay + '/' + this.currentMonth + '/' + this.currentYear;
+            this.toDay = this.currentDay;
         }
         if(name == 'timework'){
             this.$list.innerHTML = this.list
@@ -94,13 +94,11 @@ class AddEvent extends HTMLElement {
         let month = this.currentMonth
         let year = this.currentYear;
         // let timeWork = JSON.parse(JSON.stringify(localStorage.getItem('timeWork')));
-        console.log(timeWork);
         let result = await firebase
             .firestore()
             .collection('WorkCalendar')
             .where('Month', '==', month)
             .get()
-        console.log(timeWork);
         if (result.empty) {
             await firebase.firestore().collection('WorkCalendar').add({
                 Month: month,
@@ -121,6 +119,7 @@ class AddEvent extends HTMLElement {
                 .where('Month', '==', month)
                 .get()
             let data = result.docs[0]
+            console.log(data);
             await firebase.firestore()
                 .collection('TimeTables').doc(data.id)
                 .update({
@@ -140,7 +139,6 @@ class AddEvent extends HTMLElement {
     //                             });
 
     render() {
-        if (JSON.parse(localStorage.getItem('timeWork')).length > 0) {
             let data = JSON.parse(localStorage.getItem('timeWork'));
             this.$list.innerHTML = data
                 .map(time => {
@@ -149,7 +147,7 @@ class AddEvent extends HTMLElement {
             if (this.$list != "") {
                 alert('Bạn đã tạo ca thành công')
             }
-        }
+        
 
     }
     setWork(list) {
