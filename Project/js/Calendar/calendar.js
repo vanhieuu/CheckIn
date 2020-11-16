@@ -41,7 +41,7 @@ function showCalendar(month, year) {
         let cellText = document.createTextNode("");
         cell.appendChild(cellText);
         row.appendChild(cell);
-        console.log(cellText);
+        // console.log(cellText);
       } else if (date > daysInMonth) {
         break;
       } else {
@@ -60,18 +60,15 @@ function showCalendar(month, year) {
         date++;
       }
     }
-    
+
     // console.log(row);
     [...row.querySelectorAll("tr td")].forEach(async (el) => {
-        //Hien thi gio lam len lich
-        let result =  await firebase
-        .firestore()
-        .collection('TimeTables')
-        .get()
-        data = result.docs[0];
-        let getDay = data.data().Time[0].Day
-        let timeIn = data.data().Time[0].timeIn
-        let timeOut = data.data().Time[0].timeOut
+      //Hien thi gio lam len lich
+      let result = await firebase.firestore().collection("TimeTables").get();
+      data = result.docs[0];
+      let getDay = data.data().Time[0].Day;
+      let timeIn = data.data().Time[0].timeIn;
+      let timeOut = data.data().Time[0].timeOut;
       if (el.textContent == getDay) {
         var node = document.createElement("p");
         var textnode = document.createTextNode(`${timeIn} - ${timeOut}`);
@@ -87,9 +84,9 @@ function showCalendar(month, year) {
         current = e.target;
         modal.setAttribute("show", "true");
         e.target.style.backgroundColor =
-          e.target.style.backgroundColor === "yellow" ? "white" : "yellow";
+          e.target.style.backgroundColor === "#c2d3f2" ? "white" : "#c2d3f2";
         // console.log(e.target.textContent);
-        // Lyấ giá trị ngày làm 
+        // Lyấ giá trị ngày làm
         modal.setAttribute("day", el.innerHTML);
       };
     });
@@ -116,3 +113,5 @@ function Previous() {
   currenMonth = currenMonth === 0 ? 11 : currenMonth - 1;
   showCalendar(currenMonth, currentYears);
 }
+//
+//button
