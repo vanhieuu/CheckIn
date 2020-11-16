@@ -138,15 +138,15 @@ function Previous() {
 //button checkin
 let $vaoCa = document.getElementById('vaoCa');
 let $ketCa = document.getElementById('ketCa');
-console.log(today.getHours() + " " + today.getMinutes());
 function a(){
   console.log('step1');
-  //
+  //Lấy dữ liệu time vào ca [today.getHours() + " " + today.getMinutes()]
   $vaoCa.style.display = 'none'
   $ketCa.style.display = 'block'
 }
 function b(){
   console.log("step2");
+  //Lấy dữ liệu time kết ca [today.getHours() + " " + today.getMinutes()]
   alert("ket thuc ca lam")
   $ketCa.style.display ="none"
 }
