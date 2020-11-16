@@ -3,7 +3,9 @@
 	visibility: visible !important;
 	opacity: 1 !important;
 }
-
+p{
+	text-align: center;
+}
 
 
 /* #check-in-time,#check-out-time{
