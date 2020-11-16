@@ -78,7 +78,7 @@ function showCalendar(month, year) {
                 let getDay = time["Day"];
                 let timeIn = time["timeIn"];
                 let timeOut = time["timeOut"];
-                if (el.innerHTML == getDay && el.innerHTML >= today.getDate()) {
+                if (el.innerHTML == getDay && el.innerHTML > today.getDate()) {
                   var node = document.createElement("p");
                   node.style.backgroundColor = "#3d7afc";
 
@@ -93,6 +93,14 @@ function showCalendar(month, year) {
                 ) {
                   var node = document.createElement("p");
                   node.style.backgroundColor = "#8c9197";
+                  var textnode = document.createTextNode(
+                    `${timeIn} - ${timeOut}`
+                  );
+                  node.appendChild(textnode);
+                  el.appendChild(node);
+                } else if(el.innerHTML == getDay && el.innerHTML == today.getDate()){
+                  var node = document.createElement("p");
+                  node.style.backgroundColor = "#c54452";
                   var textnode = document.createTextNode(
                     `${timeIn} - ${timeOut}`
                   );
