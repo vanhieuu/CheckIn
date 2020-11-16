@@ -3,7 +3,8 @@ import { getDataDoc, timeWork } from "./ultil.js";
 class AddEvent extends HTMLElement {
     index = 1;
     current = null;
-    list = [];
+    timeIn = [];
+    timeOut = [];
     newDay = new Date();
     currentDay = String(this.newDay.getDate()).padStart(2, '0');
     currentMonth = String(this.newDay.getMonth() + 1).padStart(2, '0');
@@ -23,7 +24,7 @@ class AddEvent extends HTMLElement {
         this.$getTime = this.shadowRoot.getElementById('btn-get-time');
         this.$list = this.shadowRoot.getElementById('list');
         this.$close = this.shadowRoot.getElementById('close');
-        this.$error = this.shadowRoot.getElementById('input-error')
+        
         this.$close.addEventListener("click", () => {
             this.$modal.style.display = "none";
         })
@@ -88,7 +89,14 @@ class AddEvent extends HTMLElement {
     //     this.list = list
     //     this.render();
     // }
-
+    
+    setTimeIn(timeIn){
+        this.$timeIn = timeIn;
+    }    
+    setTimeOut(timeOut){
+        this.timeOut = timeOut;
+    }
+    
     async addEvent(timeWork) {
         console.log(this.toDay);
         let month = this.currentMonth
@@ -137,33 +145,8 @@ class AddEvent extends HTMLElement {
     //                                 Time:this.list
     //                             });
 
-    render() {
-            let data = JSON.parse(localStorage.getItem('timeWork'));
-            this.$list.innerHTML = data
-                .map(time => {
-                    return `<li>Ca ${this.index++} : ${time.timeIn}-${time.timeOut}</li>`
-                }).join("");
-            if (this.$list != "") {
-                alert('Bạn đã tạo ca thành công')
-            }
-        
-
-    }
-    setWork(list) {
-        this.$list = list
-        this.render()
-    }
-    // addWork() {
-
-    //     this.render();
-    //     firebase.firestore()
-    //         .collection("WorkCalendar")
-    //         .doc(this.getAttribute("Month"))
-    //         .update({
-    //             Time: this.list
-    //         });
-
-    // }
+    
+   
     totalTimeWork(Intime, Outtime) {
 
         const totalTimeWork = JSON.parse(localStorage.getItem('timeWork'));

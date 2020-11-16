@@ -65,7 +65,7 @@
         <check-in></check-in>
         <button onclick="a()" style="display:block;" id="vaoCa">Vao ca</button>
         <button onclick="b()" style="display:none" id="ketCa">Ket ca</button>
-        
+            
         
         <script src="https://momentjs.com/downloads/moment-with-locales.min.js"></script>
         <script src="//cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
@@ -96,7 +96,7 @@
 <template id="check-in-template">
     <link rel="stylesheet prefetch" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.1/css/font-awesome.min.css">
     <link rel="stylesheet" href="customSelect.css">
-    <div>
+    <div class="check-in">
         <form id="check-in-form"></form>
         <h3 id="time"></h3>
         <div class="box">
@@ -109,10 +109,10 @@
               <option>19:00 - 23:00</option>
             </select>
         </div>
-        <label>
-            <input type="text" id="time-work">
-        </label>
-        <Button type="submit"  class="btn btn-outline-primary" id="check-in" style="align-self: center; width: 100%; height: 40px;"> Vào ca</Button>
+            
+                <div id="time"></div>
+        <Button   class="btn btn-outline-primary" id="btn-check-in" style="align-self: center; width: 100%; height: 40px;"> Vào ca</Button>
+    </form>
     </div>
 </template>
 

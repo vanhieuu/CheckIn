@@ -2,8 +2,17 @@ let today = new Date();
 var dd = String(today.getDate()).padStart(2, "0");
 let currenMonth = today.getMonth();
 let currentYears = today.getFullYear();
+let currentDay = today.getDay()
+let hh = today.getHours();
+let mm = today.getMinutes();
+let ss = today.getSeconds();
+let endTime = new Date();
+let $hh = endTime.getHours();
+let $mm = endTime.getMinutes();
+let $ss = endTime.getSeconds();
 let modal = document.getElementById("popup");
 let closeIcon = document.querySelector(".close");
+let time = [];
 let current = null;
 let months = [
   "Jan",
@@ -85,8 +94,10 @@ function showCalendar(month, year) {
                   var textnode = document.createTextNode(
                     `${timeIn} - ${timeOut}`
                   );
+
                   node.appendChild(textnode);
                   el.appendChild(node);
+
                 } else if (
                   el.innerHTML == getDay &&
                   el.innerHTML < today.getDate()
@@ -98,7 +109,7 @@ function showCalendar(month, year) {
                   );
                   node.appendChild(textnode);
                   el.appendChild(node);
-                } else if(el.innerHTML == getDay && el.innerHTML == today.getDate()){
+                } else if (el.innerHTML == getDay && el.innerHTML == today.getDate()) {
                   var node = document.createElement("p");
                   node.style.backgroundColor = "#c54452";
                   var textnode = document.createTextNode(
@@ -153,15 +164,26 @@ function Previous() {
 //button checkin
 let $vaoCa = document.getElementById("vaoCa");
 let $ketCa = document.getElementById("ketCa");
-function a() {
-  console.log("step1");
+
+
+ function a() {
+  // console.log("step1");
   //Lấy dữ liệu time vào ca [today.getHours() + " " + today.getMinutes()]
   $vaoCa.style.display = "none";
+      let timeIn = hh + ":" + mm + ":" +ss;
+      time.push(timeIn);
   $ketCa.style.display = "block";
 }
-function b() {
-  console.log("step2");
-  //Lấy dữ liệu time kết ca [today.getHours() + " " + today.getMinutes()]
+
+ function b() {
+ 
   alert("ket thuc ca lam");
   $ketCa.style.display = "none";
-}
+  let timeOut = $hh + ":" + $mm + ":" +$ss;
+      if(time[0] != timeOut){
+          time.push(timeOut);
+        }
+        console.log(time);
+      }
+      var startDate = new Date();
+// Do your operations
