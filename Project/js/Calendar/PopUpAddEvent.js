@@ -119,7 +119,6 @@ class AddEvent extends HTMLElement {
                 .where('Month', '==', month)
                 .get()
             let data = result.docs[0]
-            console.log(data);
             await firebase.firestore()
                 .collection('TimeTables').doc(data.id)
                 .update({
