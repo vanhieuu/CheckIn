@@ -1,0 +1,12 @@
+p {
+    color:#fff;
+    font-size: 11px;
+    background-color: #3d7afc;
+    text-align: center;
+    border-radius: 6px;
+    
+}
+td{
+    width: 80px;
+    height: 80px;
+}

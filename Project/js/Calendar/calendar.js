@@ -41,7 +41,7 @@ function showCalendar(month, year) {
         let cellText = document.createTextNode("");
         cell.appendChild(cellText);
         row.appendChild(cell);
-        console.log(cellText);
+        // console.log(cellText);
       } else if (date > daysInMonth) {
         break;
       } else {
@@ -60,9 +60,10 @@ function showCalendar(month, year) {
         date++;
       }
     }
-    
+
     // console.log(row);
     [...row.querySelectorAll("tr td")].forEach(async (el) => {
+
         //Hien thi gio lam len lich
         let result =  await firebase
         .firestore()
@@ -95,6 +96,10 @@ function showCalendar(month, year) {
        
           
 
+
+    
+
+
       el.onclick = (e) => {
         if (current) {
           current.style.backgroundColor = "white";
@@ -103,9 +108,9 @@ function showCalendar(month, year) {
         current = e.target;
         modal.setAttribute("show", "true");
         e.target.style.backgroundColor =
-          e.target.style.backgroundColor === "yellow" ? "white" : "yellow";
+          e.target.style.backgroundColor === "#c2d3f2" ? "white" : "#c2d3f2";
         // console.log(e.target.textContent);
-        // Lyấ giá trị ngày làm 
+        // Lyấ giá trị ngày làm
         modal.setAttribute("day", el.innerHTML);
       };
     });
@@ -132,3 +137,5 @@ function Previous() {
   currenMonth = currenMonth === 0 ? 11 : currenMonth - 1;
   showCalendar(currenMonth, currentYears);
 }
+//
+//button
