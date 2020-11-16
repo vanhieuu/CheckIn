@@ -68,16 +68,23 @@ function showCalendar(month, year) {
         .firestore()
         .collection('TimeTables')
         .get()
-        data = result.docs[0];
-        let getDay = data.data().Time[0].Day
-        let timeIn = data.data().Time[0].timeIn
-        let timeOut = data.data().Time[0].timeOut
-      if (el.textContent == getDay) {
-        var node = document.createElement("p");
-        var textnode = document.createTextNode(`${timeIn} - ${timeOut}`);
-        node.appendChild(textnode);
-        el.appendChild(node);
-      }
+        .then((snap)=>{
+          snap.docs.forEach((data) =>{
+            data = snap.docs[0];
+            console.log(data.data().Time[0]);
+            let getDay = data.data().Time.Day[0]
+            let timeIn = data.data().Time.timeIn[0]
+            let timeOut = data.data().Time.timeOut[0]
+          if (el.innerHTML == getDay) {
+            var node = document.createElement("p");
+            var textnode = document.createTextNode(`${timeIn} - ${timeOut}`);
+            node.appendChild(textnode);
+            el.appendChild(node);
+          }
+          })
+        })
+       
+          
 
       el.onclick = (e) => {
         if (current) {
