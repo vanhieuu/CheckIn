@@ -170,8 +170,8 @@ let range = timeWork(time[0],time[1]);
                                                   Month:currenMonth,
                                                   Time:{
                                                     Day:currentDay,
-                                                    In:time[0],
-                                                    Out:time[1], 
+                                                    timeIn:time[0],
+                                                    timeOut:time[1], 
                                                     Range:range,
                                                   }
                                                 })
