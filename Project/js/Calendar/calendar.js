@@ -2,8 +2,17 @@ let today = new Date();
 var dd = String(today.getDate()).padStart(2, "0");
 let currenMonth = today.getMonth();
 let currentYears = today.getFullYear();
+let currentDay = today.getDay()
+let hh = today.getHours();
+let mm = today.getMinutes();
+let ss = today.getSeconds();
+let endTime = new Date();
+let $hh = endTime.getHours();
+let $mm = endTime.getMinutes();
+let $ss = endTime.getSeconds();
 let modal = document.getElementById("popup");
 let closeIcon = document.querySelector(".close");
+let time = [];
 let current = null;
 let months = [
   "Jan",
@@ -63,39 +72,56 @@ function showCalendar(month, year) {
 
     // console.log(row);
     [...row.querySelectorAll("tr td")].forEach(async (el) => {
-
-        //Hien thi gio lam len lich
-        let result =  await firebase
+      //Hien thi gio lam len lich
+      let result = await firebase
         .firestore()
-        .collection('TimeTables')
+        .collection("TimeTables")
         .get()
-        .then((snap)=>{
-          snap.docs.forEach((data) =>{
+        .then((snap) => {
+          snap.docs.forEach((data) => {
             data = snap.docs[0].data().Time;
-              for(let i = 0; i < data.length; i++){
-                const time = data[i];
-                  for(const key in time){
-                    const val = time[key]
-                    let getDay = time['Day']
-                    let timeIn = time['timeIn']
-                    let timeOut = time['timeOut']
-                    if (el.innerHTML == getDay) {
-                      var node = document.createElement("p");
-                      var textnode = document.createTextNode(`${timeIn} - ${timeOut}`);
-                      node.appendChild(textnode);
-                      el.appendChild(node);
-                    }
-                  }
+            for (let i = 0; i < data.length; i++) {
+              const time = data[i];
+              for (const key in time) {
+                const val = time[key];
+                let getDay = time["Day"];
+                let timeIn = time["timeIn"];
+                let timeOut = time["timeOut"];
+                if (el.innerHTML == getDay && el.innerHTML > today.getDate()) {
+                  var node = document.createElement("p");
+                  node.style.backgroundColor = "#3d7afc";
+
+                  var textnode = document.createTextNode(
+                    `${timeIn} - ${timeOut}`
+                  );
+
+                  node.appendChild(textnode);
+                  el.appendChild(node);
+
+                } else if (
+                  el.innerHTML == getDay &&
+                  el.innerHTML < today.getDate()
+                ) {
+                  var node = document.createElement("p");
+                  node.style.backgroundColor = "#8c9197";
+                  var textnode = document.createTextNode(
+                    `${timeIn} - ${timeOut}`
+                  );
+                  node.appendChild(textnode);
+                  el.appendChild(node);
+                } else if (el.innerHTML == getDay && el.innerHTML == today.getDate()) {
+                  var node = document.createElement("p");
+                  node.style.backgroundColor = "#c54452";
+                  var textnode = document.createTextNode(
+                    `${timeIn} - ${timeOut}`
+                  );
+                  node.appendChild(textnode);
+                  el.appendChild(node);
+                }
               }
-         
-          })
-        })
-       
-          
-
-
-    
-
+            }
+          });
+        });
 
       el.onclick = (e) => {
         if (current) {
@@ -136,18 +162,28 @@ function Previous() {
 }
 //
 //button checkin
-let $vaoCa = document.getElementById('vaoCa');
-let $ketCa = document.getElementById('ketCa');
-function a(){
-  console.log('step1');
+let $vaoCa = document.getElementById("vaoCa");
+let $ketCa = document.getElementById("ketCa");
+
+
+ function a() {
+  // console.log("step1");
   //Lấy dữ liệu time vào ca [today.getHours() + " " + today.getMinutes()]
-  $vaoCa.style.display = 'none'
-  $ketCa.style.display = 'block'
-}
-function b(){
-  console.log("step2");
-  //Lấy dữ liệu time kết ca [today.getHours() + " " + today.getMinutes()]
-  alert("ket thuc ca lam")
-  $ketCa.style.display ="none"
+  $vaoCa.style.display = "none";
+      let timeIn = hh + ":" + mm + ":" +ss;
+      time.push(timeIn);
+  $ketCa.style.display = "block";
 }
 
+ function b() {
+ 
+  alert("ket thuc ca lam");
+  $ketCa.style.display = "none";
+  let timeOut = $hh + ":" + $mm + ":" +$ss;
+      if(time[0] != timeOut){
+          time.push(timeOut);
+        }
+        console.log(time);
+      }
+      var startDate = new Date();
+// Do your operations
