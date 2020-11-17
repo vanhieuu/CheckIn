@@ -159,10 +159,8 @@ let $ketCa = document.getElementById("ketCa");
 
 function a() {
   $vaoCa.style.display = "none";
-  Date.prototype.timeNow = function () {
-    return console.log((this.getHours() < 10)?"0":"") + this.getHours() +":"+ ((this.getMinutes() < 10)?"0":"") + this.getMinutes() +":"+ ((this.getSeconds() < 10)?"0":"") + this.getSeconds();
-}
-        
+  
+      
   let timeIn = new Date().toLocaleTimeString();
   console.log(timeIn);
   time.push(timeIn);
