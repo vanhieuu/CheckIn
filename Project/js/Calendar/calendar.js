@@ -1,15 +1,7 @@
 let today = new Date();
-var dd = String(today.getDate()).padStart(2, "0");
-let currenMonth = today.getMonth();
+let currenMonth = today.getMonth() + 1;
 let currentYears = today.getFullYear();
 let currentDay = today.getDay()
-let hh = today.getHours();
-let mm = today.getMinutes();
-let ss = today.getSeconds();
-let endTime = new Date();
-let $hh = endTime.getHours();
-let $mm = endTime.getMinutes();
-let $ss = endTime.getSeconds();
 let modal = document.getElementById("popup");
 let closeIcon = document.querySelector(".close");
 let time = [];
@@ -158,24 +150,56 @@ let $vaoCa = document.getElementById("vaoCa");
 let $ketCa = document.getElementById("ketCa");
 
 function a() {
-  $vaoCa.style.display = "none";
-  
-      
+  $vaoCa.style.display = "none";      
   let timeIn = new Date().toLocaleTimeString();
-  console.log(timeIn);
-  time.push(timeIn);
+ let realTimeIn = convertTime12to24(timeIn);
+ time.push(realTimeIn);
   $ketCa.style.display = "block";
 }
 
-function b() {
+async function b() {
 
   alert("ket thuc ca lam");
   $ketCa.style.display = "none";
   let timeOut = new Date().toLocaleTimeString();
+let realTimeOut = convertTime12to24(timeOut)
+time.push(realTimeOut)  
+let range = timeWork(time[0],time[1]);
+      let result = await firebase.firestore().collection('RealTime')
+                                                .add({
+                                                  Month:currenMonth,
+                                                  Time:{
+                                                    Day:currentDay,
+                                                    Range:range,
+                                                  }
+                                                })
+}
+function timeWork(timeIn,timeOut) {
+  var Intime = moment(timeIn, "HH:mm:ss");
+  var Outtime = moment(timeOut, "HH:mm:ss");
+  let numWork = (Outtime.diff(Math.ceil(Intime), "hours", "minutes"))
+  // console.log((Outtime.diff(Intime, "hours", "minutes")));
+ return workingHours = Math.round(numWork * 100) / 100;
+  // console.log(workingHours);
+ 
+}
 
-  time.push(timeOut)
-      console.log(timeOut);
+  const convertTime12to24 = (time12h) => {
+    const [time, modifier] = time12h.split(' ');
+    
+    let [hours, minutes] = time.split(':');
+    
+    if (hours === '12') {
+      hours = '00';
+    }
+    
+    if (modifier === 'PM') {
+      hours = parseInt(hours, 10) + 12;
+    }
+  
+    return `${hours}:${minutes}`;
   }
-  console.log(time);
+  
 
-
+      
+      
