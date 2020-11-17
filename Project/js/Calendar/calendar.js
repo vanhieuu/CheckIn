@@ -140,15 +140,7 @@ function showCalendar(month, year) {
     tbl.appendChild(row);
   }
 }
-// [...row]
 
-// function closeModel() {
-//     closeIcon.addEventListener("click", function (e) {
-//         modal.classList.remove("show");
-
-//     })
-// }
-//Ham nay` k chay trong template
 
 function Next() {
   currentYears = currenMonth === 11 ? currentYears + 1 : currentYears;
@@ -165,25 +157,27 @@ function Previous() {
 let $vaoCa = document.getElementById("vaoCa");
 let $ketCa = document.getElementById("ketCa");
 
-
- function a() {
-  // console.log("step1");
-  //Lấy dữ liệu time vào ca [today.getHours() + " " + today.getMinutes()]
+function a() {
   $vaoCa.style.display = "none";
-      let timeIn = hh + ":" + mm + ":" +ss;
-      time.push(timeIn);
+  Date.prototype.timeNow = function () {
+    return console.log((this.getHours() < 10)?"0":"") + this.getHours() +":"+ ((this.getMinutes() < 10)?"0":"") + this.getMinutes() +":"+ ((this.getSeconds() < 10)?"0":"") + this.getSeconds();
+}
+        
+  let timeIn = new Date().toLocaleTimeString();
+  console.log(timeIn);
+  time.push(timeIn);
   $ketCa.style.display = "block";
 }
 
- function b() {
- 
+function b() {
+
   alert("ket thuc ca lam");
   $ketCa.style.display = "none";
-  let timeOut = $hh + ":" + $mm + ":" +$ss;
-      if(time[0] != timeOut){
-          time.push(timeOut);
-        }
-        console.log(time);
-      }
-      var startDate = new Date();
-// Do your operations
+  let timeOut = new Date().toLocaleTimeString();
+
+  time.push(timeOut)
+      console.log(timeOut);
+  }
+  console.log(time);
+
+
