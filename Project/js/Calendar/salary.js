@@ -11,7 +11,9 @@ firebase
     results.forEach((e, i) => {
       let html = `
     <div>
-        <h1 id=header-${i + 1} class="header">${e.data().Month}/${e.data().Year}</h1>
+        <h1 id=header-${i + 1} class="header">${e.data().Month}/${
+        e.data().Year
+      }</h1>
         <table id="item-${i + 1}" class="slideShow">
            <tr>
               <th>Day</th>
@@ -30,22 +32,26 @@ firebase
       let tag = document.getElementById(`item-${i}`);
       //data item thứ i
       let data = metadata[i - 1].data().Time;
+      //sort data depend on Day
       data.sort(function (day1, day2) {
         return day1.Day - day2.Day;
       });
       data.forEach((e) => {
-        let html = `
+        if(e.Day != undefined && e.timeIn != undefined && e.timeOut != undefined){
+           let html = `
         <tr>
            <td>${e.Day}</td>
            <td>${e.timeIn}-${e.timeOut}</td>
         </tr>
       `;
         tag.insertAdjacentHTML("beforeend", html);
+        }
       });
     }
-    //add event when hover to h1 
-    $('.header').click(function(){
-        $('.slideShow').slideDown('slow')
-    })
+    //add event when hover to h1
+    for (let i = 0; i <= len; i++) {
+      $(`#header-${i + 1}`).click(function () {
+        $(`#item-${i + 1}`).slideDown("slow");
+      });
+    }
   });
-
