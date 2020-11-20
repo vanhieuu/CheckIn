@@ -205,8 +205,8 @@ async function b() {
         Range: range,
       },
     });    
-  });
-}
+  };
+
 function timeWork(timeIn, timeOut) {
   var Intime = moment(timeIn, "HH:mm:ss");
   var Outtime = moment(timeOut, "HH:mm:ss");
