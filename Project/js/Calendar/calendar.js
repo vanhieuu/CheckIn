@@ -166,7 +166,6 @@ async function checkDayForButton() {
             let getDay = time["Day"];
             let timeIn = time["timeIn"];
             if (timeIn && getDay == today.getDate()) {
-              console.log(getDay);
               count++;
             }
           }
@@ -205,8 +204,8 @@ async function b() {
         Out: time[1],
         Range: range,
       },
-    });
-  let r;
+    });    
+  });
 }
 function timeWork(timeIn, timeOut) {
   var Intime = moment(timeIn, "HH:mm:ss");

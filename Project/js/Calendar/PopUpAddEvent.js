@@ -47,9 +47,12 @@ class AddEvent extends HTMLElement {
             };
             // const workTime = JSON.parse(localStorage.getItem('timeWork')) || [];
             this.addEvent(timeWork);
-            alert('Tạo ca làm thành công')
+            // alert('Tạo ca làm thành công')
+            setTimeout(()=>{
+                location.reload();
+              },1500)
             // this.$formAddEvent.onsubmit = (event) => {
-                this.render();
+                // this.render();
             //     event.preventDefault();
             //     // this.addWork();
             //     this.addEvent();
