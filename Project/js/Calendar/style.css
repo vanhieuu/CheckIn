@@ -11,3 +11,18 @@ td{
     width: 80px;
     height: 80px;
 }
+
+.checkIn{
+    padding-top: 1em;
+}
+.checkIn *{
+    padding: 4px 8px;
+background-color: #3d7afc;
+border-radius: 8px;
+margin: auto;
+border-style: solid;
+border-color : #3d7afc;
+font-size: 22px;
+box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+}
+
