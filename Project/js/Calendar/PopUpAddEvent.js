@@ -12,9 +12,9 @@ class AddEvent extends HTMLElement {
     toDay = this.currentDay + '/' + this.currentMonth + '/' + this.currentYear;
     constructor() {
         super()
-        if (!localStorage.getItem('timeWork')) {
-            localStorage.setItem('timeWork', "[]")
-        }
+        // if (!localStorage.getItem('timeWork')) {
+        //     localStorage.setItem('timeWork', "[]")
+        // }
         this.attachShadow({ mode: 'open' });// Có cũng được mà không cũng được
         this.shadowRoot.appendChild($template.content.cloneNode(true));
         this.$modal = this.shadowRoot.getElementById('popup1')
@@ -136,6 +136,7 @@ class AddEvent extends HTMLElement {
                     Time: [...data.data().Time, timeWork]
                 })
         }
+        alert('Tạo ca làm thành công')
 
     }
     // update(list){
