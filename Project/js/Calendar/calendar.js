@@ -76,11 +76,10 @@ function showCalendar(month, year) {
               const time = data[i];
               for (const key in time) {
                 const val = time[key];
-                let getMonth = time["Month"]
                 let getDay = time["Day"];
                 let timeIn = time["timeIn"];
                 let timeOut = time["timeOut"];
-                
+                let getMonth = time["Month"]
                 if (el.innerHTML == getDay && el.innerHTML > today.getDate() && months[month] == getMonth) {
                   var node = document.createElement("p");
                 
@@ -105,7 +104,7 @@ function showCalendar(month, year) {
                   );
                   node.appendChild(textnode);
                   el.appendChild(node);
-                } else if (el.innerHTML == getDay && el.innerHTML == today.getDate() && months[month] == getMonth) {
+                } else if (el.innerHTML == getDay && el.innerHTML == today.getDate()  && months[month] == getMonth) {
                   var node = document.createElement("p");
                   node.style.backgroundColor = "#c54452";
                   node.id = "displayTime";
@@ -115,11 +114,9 @@ function showCalendar(month, year) {
                   node.appendChild(textnode);
                   el.appendChild(node);
                 }
-                
+              }
             }
-            }
-          })
-        ;
+          });
         });
 
       el.onclick = (e) => {
@@ -202,7 +199,7 @@ async function b() {
 let realTimeOut = convertTime12to24(timeOut)
 time.push(realTimeOut)  
 // let res = await firebase.firestore().collection('RealTime').where('Month','==',currenMonth).get()
-// let dat = res.docs[0];
+let dat = res.docs[0];
 let range = timeWork(time[0],time[1]);
       await firebase.firestore().collection('RealTime')
                                                 .add({

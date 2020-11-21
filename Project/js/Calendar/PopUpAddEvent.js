@@ -64,7 +64,7 @@ class AddEvent extends HTMLElement {
     }
 
     static get observedAttributes() {
-        return ['show', 'day','month']
+        return ['show', 'day','timework']
     }
     attributeChangedCallback(name, old, newVal) {
         if (name == 'show') {
@@ -77,10 +77,11 @@ class AddEvent extends HTMLElement {
 
         }
         if (name == 'day') {
+            console.log(newVal);
             this.currentDay = newVal
             this.toDay = this.currentDay;
         }
-        if(name == 'month'){
+        if(name == 'timework'){
             this.$list.innerHTML = newVal
         }
         // console.log(name, old, newVal);
@@ -135,7 +136,7 @@ class AddEvent extends HTMLElement {
                     Time: [...data.data().Time, timeWork]
                 })
         }
-        alert('Tạo ca làm thành công')
+        alert('Tạo ca làm thành công ')
 
     }
     // update(list){
