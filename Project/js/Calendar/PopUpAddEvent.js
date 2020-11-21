@@ -77,7 +77,6 @@ class AddEvent extends HTMLElement {
 
         }
         if (name == 'day') {
-            console.log(newVal);
             this.currentDay = newVal
             this.toDay = this.currentDay;
         }

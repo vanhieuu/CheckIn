@@ -76,10 +76,12 @@ function showCalendar(month, year) {
               const time = data[i];
               for (const key in time) {
                 const val = time[key];
+                let getMonth = time["Month"]
                 let getDay = time["Day"];
                 let timeIn = time["timeIn"];
                 let timeOut = time["timeOut"];
-                if (el.innerHTML == getDay && el.innerHTML > today.getDate()) {
+                if(month == getMonth){
+                if (el.innerHTML == getDay && el.innerHTML > today.getDate() ) {
                   var node = document.createElement("p");
                 
                   node.style.backgroundColor = "#3d7afc";
@@ -113,6 +115,7 @@ function showCalendar(month, year) {
                   el.appendChild(node);
                 }
               }
+            }
             }
           });
         });
