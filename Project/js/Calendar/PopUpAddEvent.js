@@ -64,7 +64,7 @@ class AddEvent extends HTMLElement {
     }
 
     static get observedAttributes() {
-        return ['show', 'day','timework']
+        return ['show', 'day','month']
     }
     attributeChangedCallback(name, old, newVal) {
         if (name == 'show') {
@@ -80,7 +80,7 @@ class AddEvent extends HTMLElement {
             this.currentDay = newVal
             this.toDay = this.currentDay;
         }
-        if(name == 'timework'){
+        if(name == 'month'){
             this.$list.innerHTML = newVal
         }
         // console.log(name, old, newVal);
