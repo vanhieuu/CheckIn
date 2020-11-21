@@ -206,7 +206,7 @@ async function b() {
             let getDay = time["Day"];
             let timeIn = time["timeIn"];
             if ( getDay == today.getDate()) {
-                  await firebase.firestore().collection('TimeTables').doc(res.docs[0].id) 
+                 firebase.firestore().collection('TimeTables').doc(res.docs[0].id) 
                                                                       .update({Time:time});
             }
         }

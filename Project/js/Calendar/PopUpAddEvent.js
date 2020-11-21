@@ -77,7 +77,6 @@ class AddEvent extends HTMLElement {
 
         }
         if (name == 'day') {
-            console.log(newVal);
             this.currentDay = newVal
             this.toDay = this.currentDay;
         }
@@ -101,7 +100,7 @@ class AddEvent extends HTMLElement {
     }
     
     async addEvent(timeWork) {
-        console.log(this.toDay);
+    
         let month = this.currentMonth
         let year = this.currentYear;
         // let timeWork = JSON.parse(JSON.stringify(localStorage.getItem('timeWork')));
@@ -130,7 +129,7 @@ class AddEvent extends HTMLElement {
                 .where('Month', '==', month)
                 .get()
             let data = result.docs[0]
-                    firebase.firestore()
+            await firebase.firestore()
                 .collection('TimeTables').doc(data.id)
                 .update({
                     Time: [...data.data().Time, timeWork]
@@ -149,6 +148,7 @@ class AddEvent extends HTMLElement {
     //                             });
 
     
+   
 
     validate(timeIn, timeOut) {
         let isPassed = true
