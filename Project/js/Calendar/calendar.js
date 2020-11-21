@@ -1,7 +1,7 @@
 let today = new Date();
 let currenMonth = today.getMonth() + 1;
 let currentYears = today.getFullYear();
-let currentDay = today.getDay();
+let currentDay = today.getDate()
 let modal = document.getElementById("popup");
 let closeIcon = document.querySelector(".close");
 let time = [];
@@ -81,31 +81,31 @@ function showCalendar(month, year) {
                 let timeOut = time["timeOut"];
                 if (el.innerHTML == getDay && el.innerHTML > today.getDate()) {
                   var node = document.createElement("p");
-                  node.style.backgroundColor = "#3d7afc";
 
+                  node.style.backgroundColor = "#3d7afc";
                   var textnode = document.createTextNode(
                     `${timeIn} - ${timeOut}`
                   );
 
                   node.appendChild(textnode);
                   el.appendChild(node);
+
                 } else if (
                   el.innerHTML == getDay &&
                   el.innerHTML < today.getDate()
                 ) {
                   var node = document.createElement("p");
                   node.style.backgroundColor = "#8c9197";
+
                   var textnode = document.createTextNode(
                     `${timeIn} - ${timeOut}`
                   );
                   node.appendChild(textnode);
                   el.appendChild(node);
-                } else if (
-                  el.innerHTML == getDay &&
-                  el.innerHTML == today.getDate()
-                ) {
+                } else if (el.innerHTML == getDay && el.innerHTML == today.getDate()) {
                   var node = document.createElement("p");
                   node.style.backgroundColor = "#c54452";
+                  node.id = "displayTime";
                   var textnode = document.createTextNode(
                     `${timeIn} - ${timeOut}`
                   );
@@ -135,6 +135,7 @@ function showCalendar(month, year) {
   }
 }
 
+
 function Next() {
   currentYears = currenMonth === 11 ? currentYears + 1 : currentYears;
   currenMonth = (currenMonth + 1) % 12;
@@ -149,7 +150,6 @@ function Previous() {
 //button checkin
 let $vaoCa = document.getElementById("vaoCa");
 let $ketCa = document.getElementById("ketCa");
-
 async function checkDayForButton() {
   let count = 0;
   let result = await firebase
@@ -186,63 +186,79 @@ function a() {
   $ketCa.style.display = "block";
 }
 
+
 async function b() {
+
   alert("ket thuc ca lam");
+  let remove = document.getElementById('displayTime');
+  remove.remove();
+  var res = await firebase
+    .firestore()
+    .collection("TimeTables")
+    .get()
+    .then((snap) => {
+      snap.docs.forEach((data) => {
+        data = snap.docs[0].data().Time;
+        for (let i = 0; i < data.length; i++) {
+          const time = data[i];
+          for (const key in time) {
+            const val = time[key];
+            let getDay = time["Day"];
+            let timeIn = time["timeIn"];
+            if ( getDay == today.getDate()) {
+                  await firebase.firestore().collection('TimeTables').doc(res.docs[0].id) 
+                                                                      .update({Time:time});
+            }
+        }
+      }
+      })
+    })
+  
+
   $ketCa.style.display = "none";
   let timeOut = new Date().toLocaleTimeString();
-let realTimeOut = convertTime12to24(timeOut)
-time.push(realTimeOut)  
-let range = timeWork(time[0],time[1]);
-      let result = await firebase.firestore().collection('RealTime')
-                                                .add({
-                                                  Month:currenMonth,
-                                                  Time:{
-                                                    Day:currentDay,
-                                                    timeIn:time[0],
-                                                    timeOut:time[1], 
-                                                    Range:range,
-                                                  }
-                                                })
-}
-function timeWork(timeIn,timeOut) {
-  let realTimeOut = convertTime12to24(timeOut);
-  time.push(realTimeOut);
+  let realTimeOut = convertTime12to24(timeOut)
+  time.push(realTimeOut)
   let range = timeWork(time[0], time[1]);
-  let result = await firebase
-    .firestore()
-    .collection("RealTime")
+  let result = await firebase.firestore().collection('RealTime')
     .add({
       Month: currenMonth,
       Time: {
         Day: currentDay,
-        In: time[0],
-        Out: time[1],
+        timeIn: time[0],
+        timeOut: time[1],
         Range: range,
-      },
-    });    
-  };
+      }
+    })
 
+
+
+
+}
 function timeWork(timeIn, timeOut) {
   var Intime = moment(timeIn, "HH:mm:ss");
   var Outtime = moment(timeOut, "HH:mm:ss");
-  let numWork = Outtime.diff(Math.ceil(Intime), "hours", "minutes");
+  let numWork = (Outtime.diff(Math.ceil(Intime), "hours", "minutes"))
   // console.log((Outtime.diff(Intime, "hours", "minutes")));
-  return (workingHours = Math.round(numWork * 100) / 100);
+  return workingHours = Math.round(numWork * 100) / 100;
   // console.log(workingHours);
+
 }
 
 const convertTime12to24 = (time12h) => {
-  const [time, modifier] = time12h.split(" ");
+  const [time, modifier] = time12h.split(' ');
 
-  let [hours, minutes] = time.split(":");
+  let [hours, minutes] = time.split(':');
 
-  if (hours === "12") {
-    hours = "00";
+  if (hours === '12') {
+    hours = '00';
   }
 
-  if (modifier === "PM") {
+  if (modifier === 'PM') {
     hours = parseInt(hours, 10) + 12;
   }
 
   return `${hours}:${minutes}`;
-};
+}
+
+

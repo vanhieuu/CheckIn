@@ -82,7 +82,7 @@ class AddEvent extends HTMLElement {
             this.toDay = this.currentDay;
         }
         if(name == 'timework'){
-            this.$list.innerHTML = this.list
+            this.$list.innerHTML = `${this.timeIn} - ${this.timeOut}`
         }
         // console.log(name, old, newVal);
 
@@ -130,7 +130,7 @@ class AddEvent extends HTMLElement {
                 .where('Month', '==', month)
                 .get()
             let data = result.docs[0]
-            await firebase.firestore()
+                    firebase.firestore()
                 .collection('TimeTables').doc(data.id)
                 .update({
                     Time: [...data.data().Time, timeWork]
@@ -149,27 +149,7 @@ class AddEvent extends HTMLElement {
     //                             });
 
     
-   
-    totalTimeWork(Intime, Outtime) {
 
-        const totalTimeWork = JSON.parse(localStorage.getItem('timeWork'));
-        for (const key in totalTimeWork) {
-            if (totalTimeWork.hasOwnProperty(key)) {
-                const time = totalTimeWork[key];
-                //         console.log(time);
-
-
-                let getTimeIn = time[0].timeIn;
-                let getTimeOut = time[0].timeOut
-                Intime = moment(getTimeIn, "HH:mm:ss");
-                Outtime = moment(getTimeOut, "HH:mm:ss");
-                let numWork = (Outtime.diff(Math.ceil(Intime), "hours", "minutes"))
-                // console.log((Outtime.diff(Intime, "hours", "minutes")));
-                let workingHours = Math.round(numWork * 100) / 100;
-                return range = workingHours;
-            }
-        }
-    }
     validate(timeIn, timeOut) {
         let isPassed = true
         if (timeIn == "") {
