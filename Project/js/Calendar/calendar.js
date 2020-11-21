@@ -1,7 +1,7 @@
 let today = new Date();
 let currenMonth = today.getMonth() + 1;
 let currentYears = today.getFullYear();
-let currentDay = today.getDay()
+let currentDay = today.getDay();
 let modal = document.getElementById("popup");
 let closeIcon = document.querySelector(".close");
 let time = [];
@@ -89,7 +89,6 @@ function showCalendar(month, year) {
 
                   node.appendChild(textnode);
                   el.appendChild(node);
-
                 } else if (
                   el.innerHTML == getDay &&
                   el.innerHTML < today.getDate()
@@ -101,7 +100,10 @@ function showCalendar(month, year) {
                   );
                   node.appendChild(textnode);
                   el.appendChild(node);
-                } else if (el.innerHTML == getDay && el.innerHTML == today.getDate()) {
+                } else if (
+                  el.innerHTML == getDay &&
+                  el.innerHTML == today.getDate()
+                ) {
                   var node = document.createElement("p");
                   node.style.backgroundColor = "#c54452";
                   var textnode = document.createTextNode(
@@ -133,7 +135,6 @@ function showCalendar(month, year) {
   }
 }
 
-
 function Next() {
   currentYears = currenMonth === 11 ? currentYears + 1 : currentYears;
   currenMonth = (currenMonth + 1) % 12;
@@ -149,16 +150,43 @@ function Previous() {
 let $vaoCa = document.getElementById("vaoCa");
 let $ketCa = document.getElementById("ketCa");
 
+async function checkDayForButton() {
+  let count = 0;
+  let result = await firebase
+    .firestore()
+    .collection("TimeTables")
+    .get()
+    .then((snap) => {
+      snap.docs.forEach((data) => {
+        data = snap.docs[0].data().Time;
+        for (let i = 0; i < data.length; i++) {
+          const time = data[i];
+          for (const key in time) {
+            const val = time[key];
+            let getDay = time["Day"];
+            let timeIn = time["timeIn"];
+            if (timeIn && getDay == today.getDate()) {
+              count++;
+            }
+          }
+        }
+      });
+    });
+  if (count > 0) {
+    $vaoCa.style.display = "block";
+  }
+}
+checkDayForButton();
+
 function a() {
-  $vaoCa.style.display = "none";      
+  $vaoCa.style.display = "none";
   let timeIn = new Date().toLocaleTimeString();
- let realTimeIn = convertTime12to24(timeIn);
- time.push(realTimeIn);
+  let realTimeIn = convertTime12to24(timeIn);
+  time.push(realTimeIn);
   $ketCa.style.display = "block";
 }
 
 async function b() {
-
   alert("ket thuc ca lam");
   $ketCa.style.display = "none";
   let timeOut = new Date().toLocaleTimeString();
@@ -177,31 +205,44 @@ let range = timeWork(time[0],time[1]);
                                                 })
 }
 function timeWork(timeIn,timeOut) {
+  let realTimeOut = convertTime12to24(timeOut);
+  time.push(realTimeOut);
+  let range = timeWork(time[0], time[1]);
+  let result = await firebase
+    .firestore()
+    .collection("RealTime")
+    .add({
+      Month: currenMonth,
+      Time: {
+        Day: currentDay,
+        In: time[0],
+        Out: time[1],
+        Range: range,
+      },
+    });    
+  };
+
+function timeWork(timeIn, timeOut) {
   var Intime = moment(timeIn, "HH:mm:ss");
   var Outtime = moment(timeOut, "HH:mm:ss");
-  let numWork = (Outtime.diff(Math.ceil(Intime), "hours", "minutes"))
+  let numWork = Outtime.diff(Math.ceil(Intime), "hours", "minutes");
   // console.log((Outtime.diff(Intime, "hours", "minutes")));
- return workingHours = Math.round(numWork * 100) / 100;
+  return (workingHours = Math.round(numWork * 100) / 100);
   // console.log(workingHours);
- 
 }
 
-  const convertTime12to24 = (time12h) => {
-    const [time, modifier] = time12h.split(' ');
-    
-    let [hours, minutes] = time.split(':');
-    
-    if (hours === '12') {
-      hours = '00';
-    }
-    
-    if (modifier === 'PM') {
-      hours = parseInt(hours, 10) + 12;
-    }
-  
-    return `${hours}:${minutes}`;
-  }
-  
+const convertTime12to24 = (time12h) => {
+  const [time, modifier] = time12h.split(" ");
 
-      
-      
+  let [hours, minutes] = time.split(":");
+
+  if (hours === "12") {
+    hours = "00";
+  }
+
+  if (modifier === "PM") {
+    hours = parseInt(hours, 10) + 12;
+  }
+
+  return `${hours}:${minutes}`;
+};
