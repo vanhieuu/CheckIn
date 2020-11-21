@@ -81,7 +81,7 @@ function showCalendar(month, year) {
                 let timeOut = time["timeOut"];
                 if (el.innerHTML == getDay && el.innerHTML > today.getDate()) {
                   var node = document.createElement("p");
-
+                
                   node.style.backgroundColor = "#3d7afc";
                   var textnode = document.createTextNode(
                     `${timeIn} - ${timeOut}`
@@ -96,7 +96,7 @@ function showCalendar(month, year) {
                 ) {
                   var node = document.createElement("p");
                   node.style.backgroundColor = "#8c9197";
-
+                  
                   var textnode = document.createTextNode(
                     `${timeIn} - ${timeOut}`
                   );
@@ -179,10 +179,10 @@ async function checkDayForButton() {
 checkDayForButton();
 
 function a() {
-  $vaoCa.style.display = "none";
+  $vaoCa.style.display = "none";      
   let timeIn = new Date().toLocaleTimeString();
-  let realTimeIn = convertTime12to24(timeIn);
-  time.push(realTimeIn);
+ let realTimeIn = convertTime12to24(timeIn);
+ time.push(realTimeIn);
   $ketCa.style.display = "block";
 }
 
@@ -190,75 +190,53 @@ function a() {
 async function b() {
 
   alert("ket thuc ca lam");
-  let remove = document.getElementById('displayTime');
-  remove.remove();
-  var res = await firebase
-    .firestore()
-    .collection("TimeTables")
-    .get()
-    .then((snap) => {
-      snap.docs.forEach((data) => {
-        data = snap.docs[0].data().Time;
-        for (let i = 0; i < data.length; i++) {
-          const time = data[i];
-          for (const key in time) {
-            const val = time[key];
-            let getDay = time["Day"];
-            let timeIn = time["timeIn"];
-            if ( getDay == today.getDate()) {
-                 firebase.firestore().collection('TimeTables').doc(res.docs[0].id) 
-                                                                      .update({Time:time});
-            }
-        }
-      }
-      })
-    })
-  
-
+    let remove = document.getElementById('displayTime');
+            remove.remove();
   $ketCa.style.display = "none";
   let timeOut = new Date().toLocaleTimeString();
-  let realTimeOut = convertTime12to24(timeOut)
-  time.push(realTimeOut)
-  let range = timeWork(time[0], time[1]);
-  let result = await firebase.firestore().collection('RealTime')
-    .add({
-      Month: currenMonth,
-      Time: {
-        Day: currentDay,
-        timeIn: time[0],
-        timeOut: time[1],
-        Range: range,
-      }
-    })
-
-
-
-
+let realTimeOut = convertTime12to24(timeOut)
+time.push(realTimeOut)  
+// let res = await firebase.firestore().collection('RealTime').where('Month','==',currenMonth).get()
+// let dat = res.docs[0];
+let range = timeWork(time[0],time[1]);
+      await firebase.firestore().collection('RealTime')
+                                                .add({
+                                                  Month:currenMonth,
+                                                  Time:{
+                                                    Day:String(currentDay),
+                                                    timeIn:time[0],
+                                                    timeOut:time[1], 
+                                                    Range:range,
+                                                  },
+                                                  Year:String(currentYears)
+                                                })
+                                              
+                                       
 }
-function timeWork(timeIn, timeOut) {
+function timeWork(timeIn,timeOut) {
   var Intime = moment(timeIn, "HH:mm:ss");
   var Outtime = moment(timeOut, "HH:mm:ss");
   let numWork = (Outtime.diff(Math.ceil(Intime), "hours", "minutes"))
   // console.log((Outtime.diff(Intime, "hours", "minutes")));
-  return workingHours = Math.round(numWork * 100) / 100;
+ return workingHours = Math.round(numWork * 100) / 100;
   // console.log(workingHours);
-
+ 
 }
 
-const convertTime12to24 = (time12h) => {
-  const [time, modifier] = time12h.split(' ');
-
-  let [hours, minutes] = time.split(':');
-
-  if (hours === '12') {
-    hours = '00';
+  const convertTime12to24 = (time12h) => {
+    const [time, modifier] = time12h.split(' ');
+    
+    let [hours, minutes] = time.split(':');
+    
+    if (hours === '12') {
+      hours = '00';
+    }
+    
+    if (modifier === 'PM') {
+      hours = parseInt(hours, 10) + 12;
+    }
+  
+    return `${hours}:${minutes}`;
   }
-
-  if (modifier === 'PM') {
-    hours = parseInt(hours, 10) + 12;
-  }
-
-  return `${hours}:${minutes}`;
-}
 
 

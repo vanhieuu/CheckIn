@@ -47,12 +47,9 @@ class AddEvent extends HTMLElement {
             };
             // const workTime = JSON.parse(localStorage.getItem('timeWork')) || [];
             this.addEvent(timeWork);
-            // alert('Tạo ca làm thành công')
-            setTimeout(()=>{
-                location.reload();
-              },1500)
+            alert('Tạo ca làm thành công')
             // this.$formAddEvent.onsubmit = (event) => {
-                // this.render();
+                this.render();
             //     event.preventDefault();
             //     // this.addWork();
             //     this.addEvent();
@@ -77,11 +74,12 @@ class AddEvent extends HTMLElement {
 
         }
         if (name == 'day') {
+            console.log(newVal);
             this.currentDay = newVal
             this.toDay = this.currentDay;
         }
         if(name == 'timework'){
-            this.$list.innerHTML = `${this.timeIn} - ${this.timeOut}`
+            this.$list.innerHTML = newVal
         }
         // console.log(name, old, newVal);
 
@@ -100,7 +98,7 @@ class AddEvent extends HTMLElement {
     }
     
     async addEvent(timeWork) {
-    
+        console.log(this.toDay);
         let month = this.currentMonth
         let year = this.currentYear;
         // let timeWork = JSON.parse(JSON.stringify(localStorage.getItem('timeWork')));
@@ -149,7 +147,26 @@ class AddEvent extends HTMLElement {
 
     
    
+    totalTimeWork(Intime, Outtime) {
 
+        const totalTimeWork = JSON.parse(localStorage.getItem('timeWork'));
+        for (const key in totalTimeWork) {
+            if (totalTimeWork.hasOwnProperty(key)) {
+                const time = totalTimeWork[key];
+                //         console.log(time);
+
+
+                let getTimeIn = time[0].timeIn;
+                let getTimeOut = time[0].timeOut
+                Intime = moment(getTimeIn, "HH:mm:ss");
+                Outtime = moment(getTimeOut, "HH:mm:ss");
+                let numWork = (Outtime.diff(Math.ceil(Intime), "hours", "minutes"))
+                // console.log((Outtime.diff(Intime, "hours", "minutes")));
+                let workingHours = Math.round(numWork * 100) / 100;
+                return range = workingHours;
+            }
+        }
+    }
     validate(timeIn, timeOut) {
         let isPassed = true
         if (timeIn == "") {
